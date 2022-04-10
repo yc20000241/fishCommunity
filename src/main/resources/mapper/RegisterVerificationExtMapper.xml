@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fish.community.demo.mapper.RegisterVerificationExtMapper">
+  <resultMap id="BaseResultMap" type="com.fish.community.demo.model.RegisterVerification">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="email_token" jdbcType="VARCHAR" property="emailToken" />
+    <result column="email_verification" jdbcType="VARCHAR" property="emailVerification" />
+    <result column="current_time_millis" jdbcType="VARCHAR" property="currentTimeMillis" />
+  </resultMap>
+  <delete id="deleteInIds" parameterType="java.util.ArrayList">
+    delete from register_verification
+    where id in (
+      <foreach collection="list"  item="id" index="index" separator=",">
+        #{id}
+      </foreach>
+    )
+  </delete>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select * from register_verification
+  </select>
+</mapper>

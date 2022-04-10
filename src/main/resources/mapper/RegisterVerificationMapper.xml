@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fish.community.demo.mapper.RegisterVerificationMapper">
+  <resultMap id="BaseResultMap" type="com.fish.community.demo.model.RegisterVerification">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="email_token" jdbcType="VARCHAR" property="emailToken" />
+    <result column="email_verification" jdbcType="VARCHAR" property="emailVerification" />
+    <result column="current_time_millis" jdbcType="VARCHAR" property="currentTimeMillis" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, email_token, email_verification, current_time_millis
+  </sql>
+  <select id="selectByExample" parameterType="com.fish.community.demo.model.RegisterVerificationExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from register_verification
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from register_verification
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from register_verification
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.fish.community.demo.model.RegisterVerificationExample">
+    delete from register_verification
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.fish.community.demo.model.RegisterVerification">
+    insert into register_verification (id, email_token, email_verification, 
+      current_time_millis)
+    values (#{id,jdbcType=BIGINT}, #{emailToken,jdbcType=VARCHAR}, #{emailVerification,jdbcType=VARCHAR}, 
+      #{currentTimeMillis,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fish.community.demo.model.RegisterVerification">
+    insert into register_verification
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="emailToken != null">
+        email_token,
+      </if>
+      <if test="emailVerification != null">
+        email_verification,
+      </if>
+      <if test="currentTimeMillis != null">
+        current_time_millis,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="emailToken != null">
+        #{emailToken,jdbcType=VARCHAR},
+      </if>
+      <if test="emailVerification != null">
+        #{emailVerification,jdbcType=VARCHAR},
+      </if>
+      <if test="currentTimeMillis != null">
+        #{currentTimeMillis,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.fish.community.demo.model.RegisterVerificationExample" resultType="java.lang.Long">
+    select count(*) from register_verification
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update register_verification
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.emailToken != null">
+        email_token = #{record.emailToken,jdbcType=VARCHAR},
+      </if>
+      <if test="record.emailVerification != null">
+        email_verification = #{record.emailVerification,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currentTimeMillis != null">
+        current_time_millis = #{record.currentTimeMillis,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update register_verification
+    set id = #{record.id,jdbcType=BIGINT},
+      email_token = #{record.emailToken,jdbcType=VARCHAR},
+      email_verification = #{record.emailVerification,jdbcType=VARCHAR},
+      current_time_millis = #{record.currentTimeMillis,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fish.community.demo.model.RegisterVerification">
+    update register_verification
+    <set>
+      <if test="emailToken != null">
+        email_token = #{emailToken,jdbcType=VARCHAR},
+      </if>
+      <if test="emailVerification != null">
+        email_verification = #{emailVerification,jdbcType=VARCHAR},
+      </if>
+      <if test="currentTimeMillis != null">
+        current_time_millis = #{currentTimeMillis,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fish.community.demo.model.RegisterVerification">
+    update register_verification
+    set email_token = #{emailToken,jdbcType=VARCHAR},
+      email_verification = #{emailVerification,jdbcType=VARCHAR},
+      current_time_millis = #{currentTimeMillis,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
