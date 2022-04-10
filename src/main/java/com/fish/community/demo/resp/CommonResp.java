@@ -16,6 +16,10 @@ public class CommonResp<T> {
     private String message;
 
     /**
+     * 自定义状态码
+     */
+    private int code = 200;
+    /**
      * 返回泛型数据，自定义类型
      */
     private T content;
@@ -42,6 +46,14 @@ public class CommonResp<T> {
 
     public void setContent(T content) {
         this.content = content;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
     }
 
     @Override

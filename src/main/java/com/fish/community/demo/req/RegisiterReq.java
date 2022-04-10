@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 
 @Data
@@ -12,7 +13,7 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor
 public class RegisiterReq {
 
-	@Pattern(regexp = "\\d{5,11}@qq\\.com", message = "qq邮箱错误")
+	@Email
 	String email;
 
 	@Pattern(regexp = "\\d{18}", message = "邮箱验证码token错误")

@@ -2,6 +2,8 @@ package com.fish.community.demo.service;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.fish.community.demo.exception.BusinessException;
+import com.fish.community.demo.exception.BusinessExceptionCode;
 import com.fish.community.demo.mapper.RegisterVerificationMapper;
 import com.fish.community.demo.mapper.UserMapper;
 import com.fish.community.demo.model.RegisterVerification;
@@ -58,24 +60,23 @@ public class LoginService {
 	}
 
 	//判断验证码是否正确
-	private boolean getVerification(String emailToken, String emailVerification) {
+	private void getVerification(String emailToken, String emailVerification) {
 		RegisterVerificationExample registerVerificationExample = new RegisterVerificationExample();
 		registerVerificationExample.createCriteria().andEmailTokenEqualTo(emailToken);
 		List<RegisterVerification> registerVerifications = registerVerificationMapper.selectByExample(registerVerificationExample);
 		//验证码token不存在
 		if(registerVerifications.isEmpty())
-			return false;
+			throw new BusinessException(BusinessExceptionCode.QQ_VERIFICATION_TOKEN_WRONG);
 		//验证码不匹配
 		RegisterVerification registerVerification = registerVerifications.get(0);
 		String realVerification = registerVerification.getEmailVerification();
 		if(!realVerification.equals(emailVerification))
-			return false;
+			throw new BusinessException(BusinessExceptionCode.QQ_VERIFICATION_WRONG);
 		//验证码过期
 		long time = System.currentTimeMillis() - Long.valueOf(registerVerification.getCurrentTimeMillis());
 		if(time > 1000*60*5)
-			return false;
+			throw new BusinessException(BusinessExceptionCode.QQ_VERIFICATION_EXPIRED);
 
-		return true;
 	}
 
 	//发送qq验证码
@@ -89,29 +90,26 @@ public class LoginService {
 		final int LOGIN = 1;
 
 		//如果发送成功则插入email_verification
-		RegisterVerification registerVerification = sendQQEmailUtil.sendQQEmail(email, LOGIN);
-		if(registerVerification != null){
+		RegisterVerification registerVerification = null;
+		try{
+			registerVerification = sendQQEmailUtil.sendQQEmail(email, LOGIN);
 			registerVerification.setCurrentTimeMillis(System.currentTimeMillis() + "");
 			registerVerificationMapper.insert(registerVerification);
 			return registerVerification;
-		}else
-			return null;
+		}catch (Exception e){
+			throw new BusinessException(BusinessExceptionCode.VERIFICATION_SEND_FAILED);
+		}
 	}
 
 	public LoginResp loginWithEmail(UserReq userReq) {
 		LoginResp loginResp = new LoginResp();
 		//根据emailtoken查看验证码是否正确
-		boolean flag  = getVerification(userReq.getEmailToken(), userReq.getEmailVerification());
-		if(!flag){
-			loginResp.setLoginSuccess(false);
-			return loginResp;
-		}
+		getVerification(userReq.getEmailToken(), userReq.getEmailVerification());
+
 		//根据邮箱获取用户信息
 		User user = getUserByEmail(userReq.getEmail());
-		if(user == null){
-			loginResp.setLoginSuccess(false);
-			return loginResp;
-		}
+		if(user == null)
+			throw new BusinessException(BusinessExceptionCode.USER_NOT_REGISTER);
 
 		loginResp.setLoginSuccess(true);
 		loginResp.setToken(user.getToken());

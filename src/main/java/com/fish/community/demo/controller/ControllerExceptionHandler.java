@@ -45,6 +45,7 @@ public class ControllerExceptionHandler {
         LOG.warn("业务异常：{}", e.getCode().getDesc());
         commonResp.setSuccess(false);
         commonResp.setMessage(e.getCode().getDesc());
+        commonResp.setCode(e.getCode().getStatuCode());
         return commonResp;
     }
 
@@ -60,6 +61,7 @@ public class ControllerExceptionHandler {
         LOG.error("系统异常：", e);
         commonResp.setSuccess(false);
         commonResp.setMessage("系统出现异常，请联系管理员");
+        commonResp.setCode(500);
         return commonResp;
     }
 }

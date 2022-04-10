@@ -1,5 +1,7 @@
 package com.fish.community.demo.controller;
 
+import com.fish.community.demo.exception.BusinessException;
+import com.fish.community.demo.exception.BusinessExceptionCode;
 import com.fish.community.demo.model.RegisterVerification;
 import com.fish.community.demo.req.UserReq;
 import com.fish.community.demo.resp.CommonResp;
@@ -41,17 +43,11 @@ public class LoginController {
 
 
 	@PostMapping("/byEmail")
+	@ApiOperation("使用邮箱验证码登录")
 	public CommonResp loginWithEmail(@Validated @RequestBody UserReq userReq){
 		LoginResp loginResp = loginService.loginWithEmail(userReq);
 		CommonResp<LoginResp> loginRespCommonResp = new CommonResp<>();
-
-		if(loginResp.isLoginSuccess()){
-			loginRespCommonResp.setContent(loginResp);
-			loginRespCommonResp.setSuccess(true);
-		}
-		else
-			loginRespCommonResp.setSuccess(false);
-
+		loginRespCommonResp.setContent(loginResp);
 
 		return loginRespCommonResp;
 	}
@@ -63,19 +59,13 @@ public class LoginController {
 		CommonResp commonResp = new CommonResp();
 
 		boolean isMatch = Pattern.matches("\\d{5,11}@qq\\.com", email);
-		if(!isMatch) {
-			commonResp.setMessage("邮箱格式不正确");
-			return commonResp;
-		}
+		if(!isMatch)
+			throw new BusinessException(BusinessExceptionCode.EMAIL_FORMAT_WRONG);
 
 		RegisterVerification verification = loginService.getQQVerification(email);
+		commonResp.setMessage("验证码发送成功");
+		commonResp.setContent(verification);
 
-		if(verification == null){
-			commonResp.setMessage("验证码错误");
-		}else {
-			commonResp.setMessage("验证码发送成功");
-			commonResp.setContent(verification);
-		}
 		return commonResp;
 	}
 }

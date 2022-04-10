@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.Null;
 import javax.validation.constraints.Pattern;
 
@@ -16,7 +17,7 @@ public class UserReq {
 
 	String password;
 
-	@Pattern(regexp = "\\d{5,11}@qq\\.com", message = "qq邮箱错误")
+	@Email
 	String email;
 
 	String emailToken;
