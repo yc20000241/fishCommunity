@@ -34,7 +34,7 @@ public class RegisterController {
 	@ApiOperation("用qq邮箱获取验证码")
 	public CommonResp getQQVerification(@PathVariable("email") String email){
 		CommonResp<RegisterVerification> commonResp = new CommonResp<>();
-		boolean isMatch = Pattern.matches("\\d{5,11}@qq\\.com", email);
+		boolean isMatch = Pattern.matches("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$", email);
 		if(!isMatch) {
 			commonResp.setMessage("邮箱格式不正确");
 			return commonResp;
