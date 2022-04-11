@@ -22,7 +22,11 @@ public class SpringMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns(
                         "/login/**",
-                        "/register/**"
+                        "/register/**",
+                        "/webjars/**",
+                        "/swagger-ui.html/**",
+                        "/**/swagger-resources/**",
+                        "/error"
                 );
     }
 

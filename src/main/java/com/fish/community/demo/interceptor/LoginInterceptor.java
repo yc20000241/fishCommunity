@@ -25,6 +25,8 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+//        String requestURI = request.getRequestURI();//在这打断点，查看访问swagger页面的请求路径是什么
+//        System.out.println(requestURI);
         // 打印请求信息
         LOG.info("------------- LoginInterceptor 开始 -------------");
         long startTime = System.currentTimeMillis();
