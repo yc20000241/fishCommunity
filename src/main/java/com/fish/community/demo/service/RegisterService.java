@@ -9,6 +9,7 @@ import com.fish.community.demo.model.RegisterVerificationExample;
 import com.fish.community.demo.model.User;
 import com.fish.community.demo.model.UserExample;
 import com.fish.community.demo.req.RegisiterReq;
+import com.fish.community.demo.resp.RegisterGetVerificationResp;
 import com.fish.community.demo.util.CopyUtil;
 import com.fish.community.demo.util.SendQQEmailUtil;
 import com.fish.community.demo.util.SnowFlake;
@@ -30,13 +31,13 @@ public class RegisterService {
 	@Autowired
 	private SendQQEmailUtil sendQQEmailUtil;
 
-	public RegisterVerification getQQVerification(String email) {
+	public RegisterGetVerificationResp getQQVerification(String email) {
 		//查看邮箱是否被注册过
 		UserExample userExample = new UserExample();
 		userExample.createCriteria().andEmailEqualTo(email);
 		List<User> users = userMapper.selectByExample(userExample);
 		if(!users.isEmpty())
-			return null;
+			throw new BusinessException(BusinessExceptionCode.EMAIL_HAVEN_REGISTERED);
 
 		final int REGISTER = 0;
 		try {
@@ -44,7 +45,10 @@ public class RegisterService {
 			//插入email_verification
 			registerVerification.setCurrentTimeMillis(System.currentTimeMillis()+"");
 			registerVerificationMapper.insert(registerVerification);
-			return registerVerification;
+			//返回携带emailtoken的响应对象
+			RegisterGetVerificationResp registerGetVerificationResp = new RegisterGetVerificationResp();
+			registerGetVerificationResp.setEmailToken(registerVerification.getEmailToken());
+			return registerGetVerificationResp;
 		}catch (Exception e){
 			throw new BusinessException(BusinessExceptionCode.VERIFICATION_SEND_FAILED);
 		}

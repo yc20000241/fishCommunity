@@ -24,4 +24,6 @@ public class RegisiterReq {
 	@ApiModelProperty(value = "邮箱验证码")
 	String emailVerification;
 
+
+
 }

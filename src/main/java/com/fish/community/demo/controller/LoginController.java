@@ -33,10 +33,12 @@ public class LoginController {
 		if(loginResp.isLoginSuccess()){
 			loginRespCommonResp.setContent(loginResp);
 			loginRespCommonResp.setSuccess(true);
+			loginRespCommonResp.setMessage("登录成功");
 		}
-		else
+		else{
 			loginRespCommonResp.setSuccess(false);
-
+			loginRespCommonResp.setMessage("登录失败");
+		}
 
 		return loginRespCommonResp;
 	}
@@ -48,7 +50,10 @@ public class LoginController {
 		LoginResp loginResp = loginService.loginWithEmail(userReq);
 		CommonResp<LoginResp> loginRespCommonResp = new CommonResp<>();
 		loginRespCommonResp.setContent(loginResp);
-
+		if(loginResp.isLoginSuccess())
+			loginRespCommonResp.setMessage("登录成功");
+		else
+			loginRespCommonResp.setMessage("登录失败");
 		return loginRespCommonResp;
 	}
 

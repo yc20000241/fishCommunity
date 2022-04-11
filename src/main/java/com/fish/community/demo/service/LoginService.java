@@ -13,6 +13,7 @@ import com.fish.community.demo.model.UserExample;
 import com.fish.community.demo.req.UserReq;
 import com.fish.community.demo.resp.LoginResp;
 import com.fish.community.demo.util.SendQQEmailUtil;
+import com.fish.community.demo.util.SnowFlake;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -51,12 +52,61 @@ public class LoginService {
 			return loginResp;
 		}
 
+		user = putTokenToRedis(user);
+
 		loginResp.setLoginSuccess(true);
 		loginResp.setToken(user.getToken());
-		//将token-user放入redis缓存
-		redisTemplate.opsForValue().set(user.getToken(), JSONObject.toJSONString(user), 3600 * 24, TimeUnit.SECONDS);
 
 		return loginResp;
+	}
+
+	public LoginResp loginWithEmail(UserReq userReq) {
+		LoginResp loginResp = new LoginResp();
+		//根据emailtoken查看验证码是否正确
+		getVerification(userReq.getEmailToken(), userReq.getEmailVerification());
+
+		//根据邮箱获取用户信息
+		User user = getUserByEmail(userReq.getEmail());
+		if(user == null)
+			throw new BusinessException(BusinessExceptionCode.USER_NOT_REGISTER);
+
+		user = putTokenToRedis(user);
+		loginResp.setLoginSuccess(true);
+		loginResp.setToken(user.getToken());
+
+		return loginResp;
+	}
+
+	public User putTokenToRedis(User user) {
+		String userToken;
+
+		//查看reids中token是否存在
+		Object o = redisTemplate.opsForValue().get(user.getToken());
+		if(o != null){
+			//移去原来token
+			redisTemplate.delete(user.getToken());
+			//雪花算法生成新的用户token
+			SnowFlake snowFlake = new SnowFlake(1, 1);
+			userToken = snowFlake.nextId()+"";
+			//更新用户token
+			updateUserToken(userToken, user.getEmail());
+		}
+
+		userToken = user.getToken();
+		user = getUserByEmail(user.getEmail());
+		//将token-user放入redis缓存
+		redisTemplate.opsForValue().set(userToken, JSONObject.toJSONString(user), 3600 * 24, TimeUnit.SECONDS);
+
+		return user;
+	}
+
+	private void updateUserToken(String token, String email) {
+		User user = new User();
+		user.setToken(token);
+
+		UserExample userExample = new UserExample();
+		userExample.createCriteria().andEmailEqualTo(email);
+		userMapper.updateByExampleSelective(user, userExample);
 	}
 
 	//判断验证码是否正确
@@ -81,10 +131,8 @@ public class LoginService {
 
 	//发送qq验证码
 	public RegisterVerification getQQVerification(String email) {
-		UserExample userExample = new UserExample();
-		userExample.createCriteria().andEmailEqualTo(email);
-		List<User> users = userMapper.selectByExample(userExample);
-		if(users.isEmpty())
+		User user = getUserByEmail(email);
+		if(user == null)
 			return null;
 
 		final int LOGIN = 1;
@@ -99,24 +147,6 @@ public class LoginService {
 		}catch (Exception e){
 			throw new BusinessException(BusinessExceptionCode.VERIFICATION_SEND_FAILED);
 		}
-	}
-
-	public LoginResp loginWithEmail(UserReq userReq) {
-		LoginResp loginResp = new LoginResp();
-		//根据emailtoken查看验证码是否正确
-		getVerification(userReq.getEmailToken(), userReq.getEmailVerification());
-
-		//根据邮箱获取用户信息
-		User user = getUserByEmail(userReq.getEmail());
-		if(user == null)
-			throw new BusinessException(BusinessExceptionCode.USER_NOT_REGISTER);
-
-		loginResp.setLoginSuccess(true);
-		loginResp.setToken(user.getToken());
-		//将token-user放入redis缓存
-		redisTemplate.opsForValue().set(user.getToken(), JSONObject.toJSONString(user), 3600 * 24, TimeUnit.SECONDS);
-
-		return loginResp;
 	}
 
 	//通过email获取用户信息
