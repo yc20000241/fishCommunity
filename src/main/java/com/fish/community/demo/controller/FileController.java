@@ -17,10 +17,13 @@ public class FileController {
 	@Autowired
 	private FileService fileService;
 
-	@PostMapping("/upload")
+	@PostMapping("/upload/{kind}/{id}")
 	@ApiOperation("上传文件")
-	public Object uploadFile(@ApiParam("文件") @RequestParam("file") MultipartFile file) throws IOException {
-		return fileService.uploadFile(file);
+	public Object uploadFile(@ApiParam("文件") @RequestParam("file") MultipartFile file,
+							 @ApiParam("图片分类") @PathVariable("kind") String kind,
+							 @ApiParam("用户id") @PathVariable("id") long id
+	) throws IOException {
+		return fileService.uploadFile(file, kind, id);
 	}
 
 

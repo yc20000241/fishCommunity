@@ -9,7 +9,8 @@ public enum BusinessExceptionCode {
     EMAIL_FORMAT_WRONG("邮箱格式错误", 2004),
     VERIFICATION_SEND_FAILED("验证码发送失败", 2005),
     USER_NOT_REGISTER("用户未注册", 2006),
-    ILLEGAL_ACCESS_BY_DIFFERENT_USERTOKEN("非法通过他人用户token访问",2007)
+    ARTICLE_NOT_EXIst("文章不存在", 2007),
+    FILE_SAVE_FILED("文件保存失败", 2008)
     ;
 
     private String desc;
