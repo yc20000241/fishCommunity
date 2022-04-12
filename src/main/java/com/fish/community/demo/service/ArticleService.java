@@ -9,6 +9,7 @@ import com.fish.community.demo.model.Articles;
 import com.fish.community.demo.model.ArticlesExample;
 import com.fish.community.demo.model.User;
 import com.fish.community.demo.model.UserExample;
+import com.fish.community.demo.req.PublishArticleReq;
 import com.fish.community.demo.resp.ArticleDetailResp;
 import com.fish.community.demo.util.CopyUtil;
 import com.fish.community.demo.util.FileUtil;
@@ -60,23 +61,20 @@ public class ArticleService {
 		return articleDetailResp;
 	}
 
-	public void publishArticle(HttpServletRequest request,
-							   String title,
-							   int tag,
-							   MultipartFile file
-	) throws IOException {
+
+	public void publishArticle(PublishArticleReq publishArticleReq,HttpServletRequest request) throws IOException {
 		//通过token找到用户id
 		UserExample userExample = new UserExample();
 		userExample.createCriteria().andTokenEqualTo(request.getHeader("token"));
 		User user = userMapper.selectByExample(userExample).get(0);
 
 		Articles article = new Articles();
-		article.setTitle(title);
-		article.setContent(FileUtil.downFile(file,"article",user.getId()));
+		article.setTitle(publishArticleReq.getTitle());
+		article.setContent(FileUtil.downFile(publishArticleReq.getFile(),"article",user.getId()));
 		article.setGmtCreateTime(System.currentTimeMillis());
 		article.setGmtModifiedTime(System.currentTimeMillis());
 		article.setAuthor(user.getId());
-		article.setTag(tag);
+		article.setTag(publishArticleReq.getTag());
 
 		articlesMapper.insert(article);
 	}

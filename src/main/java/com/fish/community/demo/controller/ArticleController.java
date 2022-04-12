@@ -1,5 +1,6 @@
 package com.fish.community.demo.controller;
 
+import com.fish.community.demo.req.PublishArticleReq;
 import com.fish.community.demo.resp.ArticleDetailResp;
 import com.fish.community.demo.resp.CommonResp;
 import com.fish.community.demo.service.ArticleService;
@@ -13,25 +14,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @Controller
-@ResponseBody
+
 @RequestMapping("/article")
+@ResponseBody
 public class ArticleController {
 
 	@Autowired
 	private ArticleService articleService;
-
-	@PostMapping("/publish")
-	public CommonResp publishArticle(
-			@RequestParam("title") String title,
-			@RequestParam(value = "tag", defaultValue = "1") int tag,
-			@RequestParam("article") MultipartFile article,
-			HttpServletRequest request
-	) throws IOException {
-		articleService.publishArticle(request, title, tag, article);
-		CommonResp<Object> objectCommonResp = new CommonResp<>();
-		objectCommonResp.setMessage("文章发布成功");
-		return objectCommonResp;
-	}
 
 	@GetMapping("/getArticleDetail/{id}")
 	public CommonResp getArticleDetail(@PathVariable("id") long id){
@@ -41,5 +30,12 @@ public class ArticleController {
 		return articleDetailRespCommonResp;
 	}
 
+	@PostMapping("/publish")
+	public CommonResp publishArticle(PublishArticleReq publishArticleReq, HttpServletRequest request) throws IOException {
+		articleService.publishArticle(publishArticleReq, request);
+		CommonResp<Object> objectCommonResp = new CommonResp<>();
+		objectCommonResp.setMessage("文章发布成功");
+		return objectCommonResp;
+	}
 
 }
