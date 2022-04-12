@@ -18,5 +18,5 @@ public class ArticleDetailResp {
 	private Integer viewCount;
 	private Integer likeCount;
 	private Integer tag;
-	private MultipartFile content;
+	private String content;
 }

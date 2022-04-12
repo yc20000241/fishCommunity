@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -31,7 +32,7 @@ public class ArticleService {
 	@Autowired
 	private UserMapper userMapper;
 
-	public ArticleDetailResp getArticleDetail(long id) {
+	public ArticleDetailResp getArticleDetail(long id) throws IOException {
 		ArticlesExample articlesExample = new ArticlesExample();
 		articlesExample.createCriteria().andIdEqualTo(id);
 		List<Articles> articles = articlesMapper.selectByExample(articlesExample);

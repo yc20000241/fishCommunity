@@ -23,7 +23,7 @@ public class ArticleController {
 	private ArticleService articleService;
 
 	@GetMapping("/getArticleDetail/{id}")
-	public CommonResp getArticleDetail(@PathVariable("id") long id){
+	public CommonResp getArticleDetail(@PathVariable("id") long id) throws IOException {
 		ArticleDetailResp articleDetailResp = articleService.getArticleDetail(id);
 		CommonResp<ArticleDetailResp> articleDetailRespCommonResp = new CommonResp<>();
 		articleDetailRespCommonResp.setContent(articleDetailResp);

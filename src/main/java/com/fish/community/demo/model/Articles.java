@@ -5,6 +5,8 @@ public class Articles {
 
     private String title;
 
+    private String content;
+
     private Long gmtCreateTime;
 
     private Long gmtModifiedTime;
@@ -16,8 +18,6 @@ public class Articles {
     private Integer likeCount;
 
     private Integer tag;
-
-    private String content;
 
     public Long getId() {
         return id;
@@ -33,6 +33,14 @@ public class Articles {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public Long getGmtCreateTime() {
@@ -83,14 +91,6 @@ public class Articles {
         this.tag = tag;
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -99,13 +99,13 @@ public class Articles {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", title=").append(title);
+        sb.append(", content=").append(content);
         sb.append(", gmtCreateTime=").append(gmtCreateTime);
         sb.append(", gmtModifiedTime=").append(gmtModifiedTime);
         sb.append(", author=").append(author);
         sb.append(", viewCount=").append(viewCount);
         sb.append(", likeCount=").append(likeCount);
         sb.append(", tag=").append(tag);
-        sb.append(", content=").append(content);
         sb.append("]");
         return sb.toString();
     }

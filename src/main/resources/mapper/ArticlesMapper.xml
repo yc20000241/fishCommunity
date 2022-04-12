@@ -4,15 +4,13 @@
   <resultMap id="BaseResultMap" type="com.fish.community.demo.model.Articles">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="gmt_create_time" jdbcType="BIGINT" property="gmtCreateTime" />
     <result column="gmt_modified_time" jdbcType="BIGINT" property="gmtModifiedTime" />
     <result column="author" jdbcType="BIGINT" property="author" />
     <result column="view_count" jdbcType="INTEGER" property="viewCount" />
     <result column="like_count" jdbcType="INTEGER" property="likeCount" />
     <result column="tag" jdbcType="INTEGER" property="tag" />
-  </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.fish.community.demo.model.Articles">
-    <result column="content" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -73,27 +71,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, title, gmt_create_time, gmt_modified_time, author, view_count, like_count, tag
+    id, title, content, gmt_create_time, gmt_modified_time, author, view_count, like_count, 
+    tag
   </sql>
-  <sql id="Blob_Column_List">
-    content
-  </sql>
-  <select id="selectByExampleWithBLOBs" parameterType="com.fish.community.demo.model.ArticlesExample" resultMap="ResultMapWithBLOBs">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from articles
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
   <select id="selectByExample" parameterType="com.fish.community.demo.model.ArticlesExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -108,11 +88,9 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
     from articles
     where id = #{id,jdbcType=BIGINT}
   </select>
@@ -127,13 +105,13 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.fish.community.demo.model.Articles">
-    insert into articles (id, title, gmt_create_time, 
-      gmt_modified_time, author, view_count, 
-      like_count, tag, content
+    insert into articles (id, title, content, 
+      gmt_create_time, gmt_modified_time, author, 
+      view_count, like_count, tag
       )
-    values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{gmtCreateTime,jdbcType=BIGINT}, 
-      #{gmtModifiedTime,jdbcType=BIGINT}, #{author,jdbcType=BIGINT}, #{viewCount,jdbcType=INTEGER}, 
-      #{likeCount,jdbcType=INTEGER}, #{tag,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}
+    values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{gmtCreateTime,jdbcType=BIGINT}, #{gmtModifiedTime,jdbcType=BIGINT}, #{author,jdbcType=BIGINT}, 
+      #{viewCount,jdbcType=INTEGER}, #{likeCount,jdbcType=INTEGER}, #{tag,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.fish.community.demo.model.Articles">
@@ -144,6 +122,9 @@
       </if>
       <if test="title != null">
         title,
+      </if>
+      <if test="content != null">
+        content,
       </if>
       <if test="gmtCreateTime != null">
         gmt_create_time,
@@ -163,9 +144,6 @@
       <if test="tag != null">
         tag,
       </if>
-      <if test="content != null">
-        content,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -173,6 +151,9 @@
       </if>
       <if test="title != null">
         #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
       </if>
       <if test="gmtCreateTime != null">
         #{gmtCreateTime,jdbcType=BIGINT},
@@ -192,9 +173,6 @@
       <if test="tag != null">
         #{tag,jdbcType=INTEGER},
       </if>
-      <if test="content != null">
-        #{content,jdbcType=LONGVARCHAR},
-      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.fish.community.demo.model.ArticlesExample" resultType="java.lang.Long">
@@ -211,6 +189,9 @@
       </if>
       <if test="record.title != null">
         title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.content != null">
+        content = #{record.content,jdbcType=VARCHAR},
       </if>
       <if test="record.gmtCreateTime != null">
         gmt_create_time = #{record.gmtCreateTime,jdbcType=BIGINT},
@@ -230,25 +211,7 @@
       <if test="record.tag != null">
         tag = #{record.tag,jdbcType=INTEGER},
       </if>
-      <if test="record.content != null">
-        content = #{record.content,jdbcType=LONGVARCHAR},
-      </if>
     </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExampleWithBLOBs" parameterType="map">
-    update articles
-    set id = #{record.id,jdbcType=BIGINT},
-      title = #{record.title,jdbcType=VARCHAR},
-      gmt_create_time = #{record.gmtCreateTime,jdbcType=BIGINT},
-      gmt_modified_time = #{record.gmtModifiedTime,jdbcType=BIGINT},
-      author = #{record.author,jdbcType=BIGINT},
-      view_count = #{record.viewCount,jdbcType=INTEGER},
-      like_count = #{record.likeCount,jdbcType=INTEGER},
-      tag = #{record.tag,jdbcType=INTEGER},
-      content = #{record.content,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -257,6 +220,7 @@
     update articles
     set id = #{record.id,jdbcType=BIGINT},
       title = #{record.title,jdbcType=VARCHAR},
+      content = #{record.content,jdbcType=VARCHAR},
       gmt_create_time = #{record.gmtCreateTime,jdbcType=BIGINT},
       gmt_modified_time = #{record.gmtModifiedTime,jdbcType=BIGINT},
       author = #{record.author,jdbcType=BIGINT},
@@ -272,6 +236,9 @@
     <set>
       <if test="title != null">
         title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
       </if>
       <if test="gmtCreateTime != null">
         gmt_create_time = #{gmtCreateTime,jdbcType=BIGINT},
@@ -291,27 +258,13 @@
       <if test="tag != null">
         tag = #{tag,jdbcType=INTEGER},
       </if>
-      <if test="content != null">
-        content = #{content,jdbcType=LONGVARCHAR},
-      </if>
     </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.fish.community.demo.model.Articles">
-    update articles
-    set title = #{title,jdbcType=VARCHAR},
-      gmt_create_time = #{gmtCreateTime,jdbcType=BIGINT},
-      gmt_modified_time = #{gmtModifiedTime,jdbcType=BIGINT},
-      author = #{author,jdbcType=BIGINT},
-      view_count = #{viewCount,jdbcType=INTEGER},
-      like_count = #{likeCount,jdbcType=INTEGER},
-      tag = #{tag,jdbcType=INTEGER},
-      content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.fish.community.demo.model.Articles">
     update articles
     set title = #{title,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
       gmt_create_time = #{gmtCreateTime,jdbcType=BIGINT},
       gmt_modified_time = #{gmtModifiedTime,jdbcType=BIGINT},
       author = #{author,jdbcType=BIGINT},
