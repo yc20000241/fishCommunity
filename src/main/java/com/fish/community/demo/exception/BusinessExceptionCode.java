@@ -8,7 +8,8 @@ public enum BusinessExceptionCode {
     QQ_VERIFICATION_WRONG("验证码错误",2003),
     EMAIL_FORMAT_WRONG("邮箱格式错误", 2004),
     VERIFICATION_SEND_FAILED("验证码发送失败", 2005),
-    USER_NOT_REGISTER("用户未注册", 2006)
+    USER_NOT_REGISTER("用户未注册", 2006),
+    ILLEGAL_ACCESS_BY_DIFFERENT_USERTOKEN("非法通过他人用户token访问",2007)
     ;
 
     private String desc;
