@@ -15,7 +15,7 @@ import com.fish.community.demo.resp.LoginResp;
 import com.fish.community.demo.util.SendQQEmailUtil;
 import com.fish.community.demo.util.SnowFlake;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public class LoginService {
 	private UserMapper userMapper;
 
 	@Autowired
-	private RedisTemplate redisTemplate;
+	private StringRedisTemplate stringRedisTemplate;
 
 	@Autowired
 	private RegisterVerificationMapper registerVerificationMapper;
@@ -81,21 +81,22 @@ public class LoginService {
 		String userToken;
 
 		//查看reids中token是否存在
-		Object o = redisTemplate.opsForValue().get(user.getToken());
+
+		Object o = stringRedisTemplate.opsForValue().get(user.getToken());
 		if(o != null){
 			//移去原来token
-			redisTemplate.delete(user.getToken());
+			System.out.println("移除"+ stringRedisTemplate.delete(user.getToken()));
+			System.out.println(stringRedisTemplate.opsForValue().get(user.getToken()));
 			//雪花算法生成新的用户token
 			SnowFlake snowFlake = new SnowFlake(1, 1);
 			userToken = snowFlake.nextId()+"";
 			//更新用户token
 			updateUserToken(userToken, user.getEmail());
-		}
-
-		userToken = user.getToken();
+		}else
+			userToken = user.getToken();
 		user = getUserByEmail(user.getEmail());
 		//将token-user放入redis缓存
-		redisTemplate.opsForValue().set(userToken, JSONObject.toJSONString(user), 3600 * 24, TimeUnit.SECONDS);
+		stringRedisTemplate.opsForValue().set(userToken, JSONObject.toJSONString(user), 3600 * 24, TimeUnit.SECONDS);
 
 		return user;
 	}

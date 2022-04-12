@@ -41,7 +41,8 @@
                              type="XMLMAPPER"/>
 
 
-        <table tableName="user"/>
+<!--        <table tableName="user"/>-->
+<!--        <table tableName="articles"/>-->
 <!--        <table tableName="register_verification"/>-->
     </context>
 </generatorConfiguration>
