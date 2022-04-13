@@ -19,6 +19,9 @@ public class PublishArticleReq {
 	@NotNull
 	private Integer tag;
 
-	@NotNull
-	private MultipartFile file;
+	@NotEmpty
+	private String content;
+
+	@NotEmpty
+	private String articleImg;
 }

@@ -11,6 +11,7 @@
     <result column="view_count" jdbcType="INTEGER" property="viewCount" />
     <result column="like_count" jdbcType="INTEGER" property="likeCount" />
     <result column="tag" jdbcType="INTEGER" property="tag" />
+    <result column="article_img" jdbcType="VARCHAR" property="articleImg" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -72,7 +73,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, title, content, gmt_create_time, gmt_modified_time, author, view_count, like_count, 
-    tag
+    tag, article_img
   </sql>
   <select id="selectByExample" parameterType="com.fish.community.demo.model.ArticlesExample" resultMap="BaseResultMap">
     select
@@ -107,12 +108,12 @@
   <insert id="insert" parameterType="com.fish.community.demo.model.Articles">
     insert into articles (id, title, content, 
       gmt_create_time, gmt_modified_time, author, 
-      view_count, like_count, tag
-      )
+      view_count, like_count, tag, 
+      article_img)
     values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
       #{gmtCreateTime,jdbcType=BIGINT}, #{gmtModifiedTime,jdbcType=BIGINT}, #{author,jdbcType=BIGINT}, 
-      #{viewCount,jdbcType=INTEGER}, #{likeCount,jdbcType=INTEGER}, #{tag,jdbcType=INTEGER}
-      )
+      #{viewCount,jdbcType=INTEGER}, #{likeCount,jdbcType=INTEGER}, #{tag,jdbcType=INTEGER}, 
+      #{articleImg,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.fish.community.demo.model.Articles">
     insert into articles
@@ -144,6 +145,9 @@
       <if test="tag != null">
         tag,
       </if>
+      <if test="articleImg != null">
+        article_img,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -172,6 +176,9 @@
       </if>
       <if test="tag != null">
         #{tag,jdbcType=INTEGER},
+      </if>
+      <if test="articleImg != null">
+        #{articleImg,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -211,6 +218,9 @@
       <if test="record.tag != null">
         tag = #{record.tag,jdbcType=INTEGER},
       </if>
+      <if test="record.articleImg != null">
+        article_img = #{record.articleImg,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -226,7 +236,8 @@
       author = #{record.author,jdbcType=BIGINT},
       view_count = #{record.viewCount,jdbcType=INTEGER},
       like_count = #{record.likeCount,jdbcType=INTEGER},
-      tag = #{record.tag,jdbcType=INTEGER}
+      tag = #{record.tag,jdbcType=INTEGER},
+      article_img = #{record.articleImg,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -258,6 +269,9 @@
       <if test="tag != null">
         tag = #{tag,jdbcType=INTEGER},
       </if>
+      <if test="articleImg != null">
+        article_img = #{articleImg,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -270,7 +284,8 @@
       author = #{author,jdbcType=BIGINT},
       view_count = #{viewCount,jdbcType=INTEGER},
       like_count = #{likeCount,jdbcType=INTEGER},
-      tag = #{tag,jdbcType=INTEGER}
+      tag = #{tag,jdbcType=INTEGER},
+      article_img = #{articleImg,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

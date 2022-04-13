@@ -19,6 +19,8 @@ public class Articles {
 
     private Integer tag;
 
+    private String articleImg;
+
     public Long getId() {
         return id;
     }
@@ -91,6 +93,14 @@ public class Articles {
         this.tag = tag;
     }
 
+    public String getArticleImg() {
+        return articleImg;
+    }
+
+    public void setArticleImg(String articleImg) {
+        this.articleImg = articleImg;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -106,6 +116,7 @@ public class Articles {
         sb.append(", viewCount=").append(viewCount);
         sb.append(", likeCount=").append(likeCount);
         sb.append(", tag=").append(tag);
+        sb.append(", articleImg=").append(articleImg);
         sb.append("]");
         return sb.toString();
     }

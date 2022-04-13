@@ -27,7 +27,8 @@ public class SpringMvcConfig implements WebMvcConfigurer {
                         "/swagger-ui.html/**",
                         "/**/swagger-resources/**",
                         "/error",
-                        "/favicon.ico"
+                        "/favicon.ico",
+                        "/file/image/**"
                 );
     }
 

@@ -10,7 +10,9 @@ public enum BusinessExceptionCode {
     VERIFICATION_SEND_FAILED("验证码发送失败", 2005),
     USER_NOT_REGISTER("用户未注册", 2006),
     ARTICLE_NOT_EXIst("文章不存在", 2007),
-    FILE_SAVE_FILED("文件保存失败", 2008)
+    FILE_SAVE_FILED("文件保存失败", 2008),
+    UPLOAD_FILE_NOT_EMPTY("上传文件不能为空",2009),
+    FILE_PATH_NOT_EXIST("文件路径不存在", 2010)
     ;
 
     private String desc;

@@ -96,7 +96,7 @@ public class LoginService {
 			userToken = user.getToken();
 		user = getUserByEmail(user.getEmail());
 		//将token-user放入redis缓存
-		stringRedisTemplate.opsForValue().set(userToken, JSONObject.toJSONString(user), 3600 * 24, TimeUnit.SECONDS);
+		stringRedisTemplate.opsForValue().set(userToken, JSONObject.toJSONString(user), 3600 * 24 * 30, TimeUnit.SECONDS);
 
 		return user;
 	}
