@@ -39,13 +39,16 @@ public class ArticleController {
 		return objectCommonResp;
 	}
 
-	@GetMapping("/getArticleLists/{currentPage}/{listSize}/{userId}")
-	public CommonResp getArticleLists(@PathVariable("currentPage") int currentPage,
-									  @PathVariable("listSize") int listSize,
+	@RequestMapping(value = {"/getArticleLists/{currentPage}/{listSize}/{userId}", "/getArticleLists/{currentPage}/{listSize}"},method = RequestMethod.GET)
+	public CommonResp getArticleLists(@PathVariable(value = "currentPage") Integer currentPage,
+									  @PathVariable(value = "listSize", required = false) Integer listSize,
 									  @PathVariable(value = "userId", required = false) Long userId){
-		List<ArticleListResp> articleList = articleService.getArticleLists(currentPage, listSize, userId);
-		CommonResp<List<ArticleListResp>> listCommonResp = new CommonResp<>();
-		listCommonResp.setContent(articleList);
+		if(listSize == null)
+			listSize = 5;
+
+		ArticleListResp articleLists = articleService.getArticleLists(currentPage, listSize, userId);
+		CommonResp<ArticleListResp> listCommonResp = new CommonResp<>();
+		listCommonResp.setContent(articleLists);
 		return listCommonResp;
 	}
 

@@ -16,6 +16,7 @@ import com.fish.community.demo.resp.ArticleListResp;
 import com.fish.community.demo.util.CopyUtil;
 import com.fish.community.demo.util.FileUtil;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +54,7 @@ public class ArticleService {
 		//更新修改时间
 		Long modifyTime = System.currentTimeMillis();
 		Articles modifyTimeArticle = new Articles();
-		modifyTimeArticle.setGmtModifiedTime(System.currentTimeMillis());
+		modifyTimeArticle.setGmtModifiedTime(System.currentTimeMillis()+"");
 		articlesMapper.updateByExampleSelective(modifyTimeArticle, articlesExample);
 
 		//返回文章详情
@@ -89,8 +90,8 @@ public class ArticleService {
 		Articles article = new Articles();
 		article.setId(last.getId()+1);
 		article.setTitle(publishArticleReq.getTitle());
-		article.setGmtCreateTime(System.currentTimeMillis());
-		article.setGmtModifiedTime(System.currentTimeMillis());
+		article.setGmtCreateTime(System.currentTimeMillis()+"");
+		article.setGmtModifiedTime(System.currentTimeMillis()+"");
 		article.setAuthor(user.getId());
 		article.setTag(publishArticleReq.getTag());
 		article.setContent("/article/"+articleContentFileName);
@@ -99,20 +100,28 @@ public class ArticleService {
 		articlesMapper.insert(article);
 	}
 
-	public List<ArticleListResp> getArticleLists(int currentPage, int listSize, Long userId) {
+	public ArticleListResp getArticleLists(int currentPage, int listSize, Long userId) {
 		ArticlesExample articlesExample = new ArticlesExample();
 		PageHelper.startPage(currentPage, listSize);
 		List<Articles> articlesList = null;
 		if(userId == null){
-			articlesExample.createCriteria();
-			articlesList = articlesMapper.selectByExample(articlesExample);
+			articlesList = articlesExtMapper.selectAll();
 		}else{
 			articlesExample.createCriteria().andAuthorEqualTo(userId);
 			articlesList = articlesMapper.selectByExample(articlesExample);
 		}
+		//将时间戳转为日期格式
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		for (int i = 0 ; i < listSize; i++){
+			Articles articles = articlesList.get(i);
+			articles.setGmtCreateTime(dateFormat.format(Long.valueOf(articles.getGmtCreateTime())));
+		}
 
-		List<ArticleListResp> articleListRespList = CopyUtil.copyList(articlesList, ArticleListResp.class);
+		ArticleListResp articleListResp = new ArticleListResp();
+		articleListResp.setArticles(articlesList);
+		PageInfo<Articles> objectPageInfo = new PageInfo<>(articlesList);
+		articleListResp.setTotalArticlesCount(objectPageInfo.getTotal());
 
-		return articleListRespList;
+		return articleListResp;
 	}
 }

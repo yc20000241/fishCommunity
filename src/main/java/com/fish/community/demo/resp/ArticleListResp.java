@@ -1,20 +1,16 @@
 package com.fish.community.demo.resp;
 
+import com.fish.community.demo.model.Articles;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ArticleListResp {
-	private Long id;
-	private String title;
-	private String content;
-	private String gmtCreateTime;
-	private String gmtModifiedTime;
-	private Long author;
-	private Integer viewCount;
-	private Integer likeCount;
-	private Integer tag;
+	private List<Articles> articles;
+	private Long totalArticlesCount;
 }

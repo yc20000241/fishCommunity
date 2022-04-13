@@ -314,52 +314,62 @@ public class ArticlesExample {
             return (Criteria) this;
         }
 
-        public Criteria andGmtCreateTimeEqualTo(Long value) {
+        public Criteria andGmtCreateTimeEqualTo(String value) {
             addCriterion("gmt_create_time =", value, "gmtCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andGmtCreateTimeNotEqualTo(Long value) {
+        public Criteria andGmtCreateTimeNotEqualTo(String value) {
             addCriterion("gmt_create_time <>", value, "gmtCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andGmtCreateTimeGreaterThan(Long value) {
+        public Criteria andGmtCreateTimeGreaterThan(String value) {
             addCriterion("gmt_create_time >", value, "gmtCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andGmtCreateTimeGreaterThanOrEqualTo(Long value) {
+        public Criteria andGmtCreateTimeGreaterThanOrEqualTo(String value) {
             addCriterion("gmt_create_time >=", value, "gmtCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andGmtCreateTimeLessThan(Long value) {
+        public Criteria andGmtCreateTimeLessThan(String value) {
             addCriterion("gmt_create_time <", value, "gmtCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andGmtCreateTimeLessThanOrEqualTo(Long value) {
+        public Criteria andGmtCreateTimeLessThanOrEqualTo(String value) {
             addCriterion("gmt_create_time <=", value, "gmtCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andGmtCreateTimeIn(List<Long> values) {
+        public Criteria andGmtCreateTimeLike(String value) {
+            addCriterion("gmt_create_time like", value, "gmtCreateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtCreateTimeNotLike(String value) {
+            addCriterion("gmt_create_time not like", value, "gmtCreateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtCreateTimeIn(List<String> values) {
             addCriterion("gmt_create_time in", values, "gmtCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andGmtCreateTimeNotIn(List<Long> values) {
+        public Criteria andGmtCreateTimeNotIn(List<String> values) {
             addCriterion("gmt_create_time not in", values, "gmtCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andGmtCreateTimeBetween(Long value1, Long value2) {
+        public Criteria andGmtCreateTimeBetween(String value1, String value2) {
             addCriterion("gmt_create_time between", value1, value2, "gmtCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andGmtCreateTimeNotBetween(Long value1, Long value2) {
+        public Criteria andGmtCreateTimeNotBetween(String value1, String value2) {
             addCriterion("gmt_create_time not between", value1, value2, "gmtCreateTime");
             return (Criteria) this;
         }
@@ -374,52 +384,62 @@ public class ArticlesExample {
             return (Criteria) this;
         }
 
-        public Criteria andGmtModifiedTimeEqualTo(Long value) {
+        public Criteria andGmtModifiedTimeEqualTo(String value) {
             addCriterion("gmt_modified_time =", value, "gmtModifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andGmtModifiedTimeNotEqualTo(Long value) {
+        public Criteria andGmtModifiedTimeNotEqualTo(String value) {
             addCriterion("gmt_modified_time <>", value, "gmtModifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andGmtModifiedTimeGreaterThan(Long value) {
+        public Criteria andGmtModifiedTimeGreaterThan(String value) {
             addCriterion("gmt_modified_time >", value, "gmtModifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andGmtModifiedTimeGreaterThanOrEqualTo(Long value) {
+        public Criteria andGmtModifiedTimeGreaterThanOrEqualTo(String value) {
             addCriterion("gmt_modified_time >=", value, "gmtModifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andGmtModifiedTimeLessThan(Long value) {
+        public Criteria andGmtModifiedTimeLessThan(String value) {
             addCriterion("gmt_modified_time <", value, "gmtModifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andGmtModifiedTimeLessThanOrEqualTo(Long value) {
+        public Criteria andGmtModifiedTimeLessThanOrEqualTo(String value) {
             addCriterion("gmt_modified_time <=", value, "gmtModifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andGmtModifiedTimeIn(List<Long> values) {
+        public Criteria andGmtModifiedTimeLike(String value) {
+            addCriterion("gmt_modified_time like", value, "gmtModifiedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtModifiedTimeNotLike(String value) {
+            addCriterion("gmt_modified_time not like", value, "gmtModifiedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtModifiedTimeIn(List<String> values) {
             addCriterion("gmt_modified_time in", values, "gmtModifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andGmtModifiedTimeNotIn(List<Long> values) {
+        public Criteria andGmtModifiedTimeNotIn(List<String> values) {
             addCriterion("gmt_modified_time not in", values, "gmtModifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andGmtModifiedTimeBetween(Long value1, Long value2) {
+        public Criteria andGmtModifiedTimeBetween(String value1, String value2) {
             addCriterion("gmt_modified_time between", value1, value2, "gmtModifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andGmtModifiedTimeNotBetween(Long value1, Long value2) {
+        public Criteria andGmtModifiedTimeNotBetween(String value1, String value2) {
             addCriterion("gmt_modified_time not between", value1, value2, "gmtModifiedTime");
             return (Criteria) this;
         }

@@ -5,8 +5,8 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="content" jdbcType="VARCHAR" property="content" />
-    <result column="gmt_create_time" jdbcType="BIGINT" property="gmtCreateTime" />
-    <result column="gmt_modified_time" jdbcType="BIGINT" property="gmtModifiedTime" />
+    <result column="gmt_create_time" jdbcType="VARCHAR" property="gmtCreateTime" />
+    <result column="gmt_modified_time" jdbcType="VARCHAR" property="gmtModifiedTime" />
     <result column="author" jdbcType="BIGINT" property="author" />
     <result column="view_count" jdbcType="INTEGER" property="viewCount" />
     <result column="like_count" jdbcType="INTEGER" property="likeCount" />
@@ -111,7 +111,7 @@
       view_count, like_count, tag, 
       article_img)
     values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
-      #{gmtCreateTime,jdbcType=BIGINT}, #{gmtModifiedTime,jdbcType=BIGINT}, #{author,jdbcType=BIGINT}, 
+      #{gmtCreateTime,jdbcType=VARCHAR}, #{gmtModifiedTime,jdbcType=VARCHAR}, #{author,jdbcType=BIGINT}, 
       #{viewCount,jdbcType=INTEGER}, #{likeCount,jdbcType=INTEGER}, #{tag,jdbcType=INTEGER}, 
       #{articleImg,jdbcType=VARCHAR})
   </insert>
@@ -160,10 +160,10 @@
         #{content,jdbcType=VARCHAR},
       </if>
       <if test="gmtCreateTime != null">
-        #{gmtCreateTime,jdbcType=BIGINT},
+        #{gmtCreateTime,jdbcType=VARCHAR},
       </if>
       <if test="gmtModifiedTime != null">
-        #{gmtModifiedTime,jdbcType=BIGINT},
+        #{gmtModifiedTime,jdbcType=VARCHAR},
       </if>
       <if test="author != null">
         #{author,jdbcType=BIGINT},
@@ -201,10 +201,10 @@
         content = #{record.content,jdbcType=VARCHAR},
       </if>
       <if test="record.gmtCreateTime != null">
-        gmt_create_time = #{record.gmtCreateTime,jdbcType=BIGINT},
+        gmt_create_time = #{record.gmtCreateTime,jdbcType=VARCHAR},
       </if>
       <if test="record.gmtModifiedTime != null">
-        gmt_modified_time = #{record.gmtModifiedTime,jdbcType=BIGINT},
+        gmt_modified_time = #{record.gmtModifiedTime,jdbcType=VARCHAR},
       </if>
       <if test="record.author != null">
         author = #{record.author,jdbcType=BIGINT},
@@ -231,8 +231,8 @@
     set id = #{record.id,jdbcType=BIGINT},
       title = #{record.title,jdbcType=VARCHAR},
       content = #{record.content,jdbcType=VARCHAR},
-      gmt_create_time = #{record.gmtCreateTime,jdbcType=BIGINT},
-      gmt_modified_time = #{record.gmtModifiedTime,jdbcType=BIGINT},
+      gmt_create_time = #{record.gmtCreateTime,jdbcType=VARCHAR},
+      gmt_modified_time = #{record.gmtModifiedTime,jdbcType=VARCHAR},
       author = #{record.author,jdbcType=BIGINT},
       view_count = #{record.viewCount,jdbcType=INTEGER},
       like_count = #{record.likeCount,jdbcType=INTEGER},
@@ -252,10 +252,10 @@
         content = #{content,jdbcType=VARCHAR},
       </if>
       <if test="gmtCreateTime != null">
-        gmt_create_time = #{gmtCreateTime,jdbcType=BIGINT},
+        gmt_create_time = #{gmtCreateTime,jdbcType=VARCHAR},
       </if>
       <if test="gmtModifiedTime != null">
-        gmt_modified_time = #{gmtModifiedTime,jdbcType=BIGINT},
+        gmt_modified_time = #{gmtModifiedTime,jdbcType=VARCHAR},
       </if>
       <if test="author != null">
         author = #{author,jdbcType=BIGINT},
@@ -279,8 +279,8 @@
     update articles
     set title = #{title,jdbcType=VARCHAR},
       content = #{content,jdbcType=VARCHAR},
-      gmt_create_time = #{gmtCreateTime,jdbcType=BIGINT},
-      gmt_modified_time = #{gmtModifiedTime,jdbcType=BIGINT},
+      gmt_create_time = #{gmtCreateTime,jdbcType=VARCHAR},
+      gmt_modified_time = #{gmtModifiedTime,jdbcType=VARCHAR},
       author = #{author,jdbcType=BIGINT},
       view_count = #{viewCount,jdbcType=INTEGER},
       like_count = #{likeCount,jdbcType=INTEGER},

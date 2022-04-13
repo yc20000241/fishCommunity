@@ -7,9 +7,9 @@ public class Articles {
 
     private String content;
 
-    private Long gmtCreateTime;
+    private String gmtCreateTime;
 
-    private Long gmtModifiedTime;
+    private String gmtModifiedTime;
 
     private Long author;
 
@@ -45,19 +45,19 @@ public class Articles {
         this.content = content;
     }
 
-    public Long getGmtCreateTime() {
+    public String getGmtCreateTime() {
         return gmtCreateTime;
     }
 
-    public void setGmtCreateTime(Long gmtCreateTime) {
+    public void setGmtCreateTime(String gmtCreateTime) {
         this.gmtCreateTime = gmtCreateTime;
     }
 
-    public Long getGmtModifiedTime() {
+    public String getGmtModifiedTime() {
         return gmtModifiedTime;
     }
 
-    public void setGmtModifiedTime(Long gmtModifiedTime) {
+    public void setGmtModifiedTime(String gmtModifiedTime) {
         this.gmtModifiedTime = gmtModifiedTime;
     }
 
@@ -120,4 +120,5 @@ public class Articles {
         sb.append("]");
         return sb.toString();
     }
+
 }

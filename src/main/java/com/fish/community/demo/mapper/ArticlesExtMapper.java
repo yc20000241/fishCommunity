@@ -14,4 +14,6 @@ public interface ArticlesExtMapper {
 
     Articles getLast();
 
+    List<Articles> selectAll();
+
 }
