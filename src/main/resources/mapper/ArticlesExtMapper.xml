@@ -44,11 +44,52 @@
     limit #{start}, #{listSize}
   </select>
 
+  <select id="getCountSearchArticleByKey" resultType="int">
+    select count(*)
+    from articles
+    where title like concat('%',#{key},'%')
+  </select>
+
   <select id="searchPersonalArticleByKey" resultMap="BaseResultMap">
     select
     <include refid="com.fish.community.demo.mapper.ArticlesMapper.Base_Column_List"/>
     from articles
     where title like concat('%',#{key},'%') and author = #{userId}
     limit #{start}, #{listSize}
+  </select>
+
+  <select id="getCountSearchPersonalArticleByKey" resultType="int">
+    select
+    <include refid="com.fish.community.demo.mapper.ArticlesMapper.Base_Column_List"/>
+    from articles
+    where title like concat('%',#{key},'%') and author = #{userId}
+  </select>
+
+  <select id="searchArticleByTag" resultMap="BaseResultMap">
+    select
+    <include refid="com.fish.community.demo.mapper.ArticlesMapper.Base_Column_List"/>
+    from articles
+    where tag = #{tag}
+    limit #{start}, #{listSize}
+  </select>
+
+  <select id="getCountSearchArticleByTag" resultType="int">
+    select count(*)
+    from articles
+    where tag = #{tag}
+  </select>
+
+  <select id="searchPersonalArticleByTag" resultMap="BaseResultMap">
+    select
+    <include refid="com.fish.community.demo.mapper.ArticlesMapper.Base_Column_List"/>
+    from articles
+    where tag = #{tag} and author = #{userId}
+    limit #{start}, #{listSize}
+  </select>
+
+  <select id="getCountSearchPersonalArticleByTag" resultType="int">
+    select count(*)
+    from articles
+    where tag = #{tag} and author = #{userId}
   </select>
 </mapper>

@@ -64,4 +64,17 @@ public class ArticleController {
 		return listCommonResp;
 	}
 
+	@RequestMapping(value = {"/search/tag/{currentPage}/{listSize}/{userId}/{tag}", "/search/tag/{currentPage}/{listSize}/{tag}" }, method = RequestMethod.GET)
+	public CommonResp searchByTag(@PathVariable("tag") Integer tag,
+								  @PathVariable(value = "currentPage") Integer currentPage,
+								  @PathVariable(value = "listSize", required = false) Integer listSize,
+								  @PathVariable(value = "userId", required = false) Long userId){
+		if(listSize == null)
+			listSize = 5;
+
+		ArticleListResp articleLists = articleService.searchByTag(tag, currentPage, listSize, userId);
+		CommonResp<ArticleListResp> listCommonResp = new CommonResp<>();
+		listCommonResp.setContent(articleLists);
+		return listCommonResp;
+	}
 }

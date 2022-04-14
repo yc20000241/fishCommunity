@@ -23,4 +23,16 @@ public interface ArticlesExtMapper {
 	List<Articles> searchArticleByKey(String key, Integer start, Integer listSize);
 
 	List<Articles> searchPersonalArticleByKey(String key, Integer start, Integer listSize, Long userId);
+
+	Integer getCountSearchArticleByKey(String key);
+
+	Integer getCountSearchPersonalArticleByKey(String key, Long userId);
+
+	List<Articles> searchArticleByTag(Integer tag, Integer start, Integer listSize);
+
+	List<Articles> searchPersonalArticleByTag(Integer tag, Integer start, Integer listSize, Long userId);
+
+	Integer getCountSearchArticleByTag(Integer tag);
+
+	Integer getCountSearchPersonalArticleByTag(Integer tag, Long userId);
 }

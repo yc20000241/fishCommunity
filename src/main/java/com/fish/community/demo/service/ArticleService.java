@@ -141,13 +141,40 @@ public class ArticleService {
 	public ArticleListResp searchByKey(String key, Integer currentPage, Integer listSize, Long userId) {
 		List<Articles> articlesList = null;
 		Integer start = (currentPage-1)*listSize;
-		if(userId == null)
+		Integer total = 0;
+		if(userId == null){
 			articlesList = articlesExtMapper.searchArticleByKey(key, start, listSize);
-		else
+			//获取总条数
+			total = articlesExtMapper.getCountSearchArticleByKey(key);
+		}
+		else{
 			articlesList = articlesExtMapper.searchPersonalArticleByKey(key, start, listSize, userId);
-
+			total = articlesExtMapper.getCountSearchPersonalArticleByKey(key, userId);
+		}
+		total = (total==null ? 0 : total);
 		ArticleListResp articleListResp = new ArticleListResp();
 		articleListResp.setArticles(articlesList);
+		articleListResp.setTotalArticlesCount((long)total);
 		return articleListResp;
+	}
+
+	public ArticleListResp searchByTag(Integer tag, Integer currentPage, Integer listSize, Long userId) {
+		List<Articles> articlesList = null;
+		Integer start = (currentPage-1)*listSize;
+		Integer count = null;
+		if(userId == null){
+			articlesList = articlesExtMapper.searchArticleByTag(tag, start, listSize);
+			count = articlesExtMapper.getCountSearchArticleByTag(tag);
+		}
+		else{
+			articlesList = articlesExtMapper.searchPersonalArticleByTag(tag, start, listSize, userId);
+			count = articlesExtMapper.getCountSearchPersonalArticleByTag(tag, userId);
+		}
+		count = (count==null ? 0 : count);
+		ArticleListResp articleListResp = new ArticleListResp();
+		articleListResp.setArticles(articlesList);
+		articleListResp.setTotalArticlesCount((long)count);
+		return articleListResp;
+
 	}
 }
