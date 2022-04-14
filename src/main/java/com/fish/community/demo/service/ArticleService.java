@@ -101,6 +101,17 @@ public class ArticleService {
 	}
 
 	public ArticleListResp getArticleLists(int currentPage, int listSize, Long userId) {
+		//获取总页数
+		int count = 0;
+		if(userId == null)
+			count = articlesExtMapper.getTotalArticleCount();
+		else
+			count = articlesExtMapper.getTotalPersonalArticleCount(userId);
+		//如果listsize超出总页数则改变
+		if(count < currentPage*listSize){
+			listSize = count - (currentPage-1)*listSize;
+		}
+
 		ArticlesExample articlesExample = new ArticlesExample();
 		PageHelper.startPage(currentPage, listSize);
 		List<Articles> articlesList = null;
@@ -115,6 +126,8 @@ public class ArticleService {
 		for (int i = 0 ; i < listSize; i++){
 			Articles articles = articlesList.get(i);
 			articles.setGmtCreateTime(dateFormat.format(Long.valueOf(articles.getGmtCreateTime())));
+			//从文件读取内容
+			articles.setContent(FileUtil.ReadPartContentFromFile("./file"+articles.getContent()));
 		}
 
 		ArticleListResp articleListResp = new ArticleListResp();
@@ -122,6 +135,19 @@ public class ArticleService {
 		PageInfo<Articles> objectPageInfo = new PageInfo<>(articlesList);
 		articleListResp.setTotalArticlesCount(objectPageInfo.getTotal());
 
+		return articleListResp;
+	}
+
+	public ArticleListResp searchByKey(String key, Integer currentPage, Integer listSize, Long userId) {
+		List<Articles> articlesList = null;
+		Integer start = (currentPage-1)*listSize;
+		if(userId == null)
+			articlesList = articlesExtMapper.searchArticleByKey(key, start, listSize);
+		else
+			articlesList = articlesExtMapper.searchPersonalArticleByKey(key, start, listSize, userId);
+
+		ArticleListResp articleListResp = new ArticleListResp();
+		articleListResp.setArticles(articlesList);
 		return articleListResp;
 	}
 }

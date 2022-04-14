@@ -28,4 +28,27 @@
     from articles
   </select>
 
+  <select id="getTotalArticleCount" resultType="int">
+    select count(*) from articles
+  </select>
+
+  <select id="getTotalPersonalArticleCount" resultType="int" parameterType="long">
+    select count(*) from articles where author = #{userId}
+  </select>
+
+  <select id="searchArticleByKey" resultMap="BaseResultMap">
+    select
+    <include refid="com.fish.community.demo.mapper.ArticlesMapper.Base_Column_List"/>
+    from articles
+    where title like concat('%',#{key},'%')
+    limit #{start}, #{listSize}
+  </select>
+
+  <select id="searchPersonalArticleByKey" resultMap="BaseResultMap">
+    select
+    <include refid="com.fish.community.demo.mapper.ArticlesMapper.Base_Column_List"/>
+    from articles
+    where title like concat('%',#{key},'%') and author = #{userId}
+    limit #{start}, #{listSize}
+  </select>
 </mapper>

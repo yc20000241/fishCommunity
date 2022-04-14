@@ -16,4 +16,11 @@ public interface ArticlesExtMapper {
 
     List<Articles> selectAll();
 
+	int getTotalArticleCount();
+
+	int getTotalPersonalArticleCount(Long userId);
+
+	List<Articles> searchArticleByKey(String key, Integer start, Integer listSize);
+
+	List<Articles> searchPersonalArticleByKey(String key, Integer start, Integer listSize, Long userId);
 }

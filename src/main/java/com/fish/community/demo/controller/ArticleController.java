@@ -1,6 +1,5 @@
 package com.fish.community.demo.controller;
 
-import com.fish.community.demo.model.Articles;
 import com.fish.community.demo.req.PublishArticleReq;
 import com.fish.community.demo.resp.ArticleDetailResp;
 import com.fish.community.demo.resp.ArticleListResp;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.List;
 
 @Controller
 
@@ -47,6 +45,20 @@ public class ArticleController {
 			listSize = 5;
 
 		ArticleListResp articleLists = articleService.getArticleLists(currentPage, listSize, userId);
+		CommonResp<ArticleListResp> listCommonResp = new CommonResp<>();
+		listCommonResp.setContent(articleLists);
+		return listCommonResp;
+	}
+
+	@RequestMapping(value = {"/search/{currentPage}/{listSize}/{userId}", "/search/{currentPage}/{listSize}" }, method = RequestMethod.GET)
+	public CommonResp searchByKey(@RequestParam("key") String key,
+								  @PathVariable(value = "currentPage") Integer currentPage,
+								  @PathVariable(value = "listSize", required = false) Integer listSize,
+								  @PathVariable(value = "userId", required = false) Long userId){
+		if(listSize == null)
+			listSize = 5;
+
+		ArticleListResp articleLists = articleService.searchByKey(key, currentPage, listSize, userId);
 		CommonResp<ArticleListResp> listCommonResp = new CommonResp<>();
 		listCommonResp.setContent(articleLists);
 		return listCommonResp;

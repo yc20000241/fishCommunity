@@ -16,7 +16,7 @@ import java.io.*;
 public class FileUtil {
 
 	public static String downFile(MultipartFile file, String kind, Long userId) throws IOException {
-		String filePath = new File("./file").getAbsolutePath();
+		String filePath = new File("./file/"+kind).getAbsolutePath();
 		File fileUpload = createFolder(kind);
 		//file.getOriginalFilename()
 		String fileName = userId.toString()+"_"+file.getOriginalFilename();
@@ -48,7 +48,7 @@ public class FileUtil {
 	}
 
 	public static boolean fileIsExist(String path){
-		String filePath = new File("."+path).getAbsolutePath();
+		String filePath = new File(path).getAbsolutePath();
 		File fileUpload = new File(filePath);
 		if (!fileUpload.exists()) {
 			return false;
@@ -62,7 +62,7 @@ public class FileUtil {
 			BufferedWriter bufferedWriter = null;
 			File distFile=null;
 			try {
-					distFile= new File("./file/"+kind+"/"+fileName);
+				distFile= new File("./file/"+kind+"/"+fileName);
 				if (!distFile.getParentFile().exists())
 					distFile.getParentFile().mkdirs();
 				bufferedReader = new BufferedReader(new StringReader(content));
@@ -89,6 +89,24 @@ public class FileUtil {
 			String line = "";
 			while ((line = br.readLine()) != null) {
 				sb.append(line);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return sb.toString();
+	}
+
+	public static String ReadPartContentFromFile(String content) {
+		StringBuffer sb = null;
+		try (BufferedReader br = new BufferedReader(new FileReader(content))) {
+			sb = new StringBuffer();
+			String line = "";
+			int count = 0;
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+				count++;
+				if(count % 10 == 0 && sb.toString().length() > 300)
+					break;;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
