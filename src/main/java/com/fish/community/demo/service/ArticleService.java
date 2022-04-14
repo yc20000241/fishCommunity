@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -100,35 +101,24 @@ public class ArticleService {
 		articlesMapper.insert(article);
 	}
 
-	public ArticleListResp getArticleLists(int currentPage, int listSize, Long userId) {
-		//获取总页数
-		int count = 0;
-		if(userId == null)
-			count = articlesExtMapper.getTotalArticleCount();
-		else
-			count = articlesExtMapper.getTotalPersonalArticleCount(userId);
-		//如果listsize超出总页数则改变
-		if(count < currentPage*listSize){
-			listSize = count - (currentPage-1)*listSize;
-		}
+	public ArticleListResp getArticleLists(int currentPage, int listSize, Long userId, Integer sortKind) {
 
 		ArticlesExample articlesExample = new ArticlesExample();
 		PageHelper.startPage(currentPage, listSize);
 		List<Articles> articlesList = null;
+
 		if(userId == null){
 			articlesList = articlesExtMapper.selectAll();
 		}else{
 			articlesExample.createCriteria().andAuthorEqualTo(userId);
 			articlesList = articlesMapper.selectByExample(articlesExample);
 		}
+
+		//给列表按要求排序
+		articlesList = articleListSort(articlesList, sortKind);
+
 		//将时间戳转为日期格式
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		for (int i = 0 ; i < listSize; i++){
-			Articles articles = articlesList.get(i);
-			articles.setGmtCreateTime(dateFormat.format(Long.valueOf(articles.getGmtCreateTime())));
-			//从文件读取内容
-			articles.setContent(FileUtil.ReadPartContentFromFile("./file"+articles.getContent()));
-		}
+		articlesList = gmtTransToDateAndReadFile(articlesList,listSize);
 
 		ArticleListResp articleListResp = new ArticleListResp();
 		articleListResp.setArticles(articlesList);
@@ -138,7 +128,21 @@ public class ArticleService {
 		return articleListResp;
 	}
 
-	public ArticleListResp searchByKey(String key, Integer currentPage, Integer listSize, Long userId) {
+	private List<Articles> gmtTransToDateAndReadFile(List<Articles> articlesList, int listSize) {
+		if(articlesList.size() < listSize)
+			listSize = articlesList.size();
+
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		for (int i = 0 ; i < listSize; i++){
+			Articles articles = articlesList.get(i);
+			articles.setGmtCreateTime(dateFormat.format(Long.valueOf(articles.getGmtCreateTime())));
+			//从文件读取内容
+			articles.setContent(FileUtil.ReadPartContentFromFile("./file"+articles.getContent()));
+		}
+		return articlesList;
+	}
+
+	public ArticleListResp searchByKey(String key, Integer currentPage, Integer listSize, Long userId, Integer sortKind) {
 		List<Articles> articlesList = null;
 		Integer start = (currentPage-1)*listSize;
 		Integer total = 0;
@@ -151,6 +155,12 @@ public class ArticleService {
 			articlesList = articlesExtMapper.searchPersonalArticleByKey(key, start, listSize, userId);
 			total = articlesExtMapper.getCountSearchPersonalArticleByKey(key, userId);
 		}
+		//给列表按要求排序
+		articlesList = articleListSort(articlesList, sortKind);
+
+		//将时间戳改为日期模式
+		articlesList = gmtTransToDateAndReadFile(articlesList, listSize);
+
 		total = (total==null ? 0 : total);
 		ArticleListResp articleListResp = new ArticleListResp();
 		articleListResp.setArticles(articlesList);
@@ -158,7 +168,20 @@ public class ArticleService {
 		return articleListResp;
 	}
 
-	public ArticleListResp searchByTag(Integer tag, Integer currentPage, Integer listSize, Long userId) {
+	private List<Articles> articleListSort(List<Articles> articlesList, Integer sortKind) {
+		if(sortKind == 1)//最新的在前面
+			articlesList.sort(Comparator.comparing(Articles::getGmtCreateTime).reversed());
+		else if(sortKind == 2)//最旧的在前面
+			articlesList.sort(Comparator.comparing(Articles::getGmtCreateTime));
+		else if(sortKind == 3)
+			articlesList.sort(Comparator.comparing(Articles::getViewCount));
+		else
+			articlesList.sort(Comparator.comparing(Articles::getViewCount).reversed());
+
+		return articlesList;
+	}
+
+	public ArticleListResp searchByTag(Integer tag, Integer currentPage, Integer listSize, Long userId, Integer sortKind) {
 		List<Articles> articlesList = null;
 		Integer start = (currentPage-1)*listSize;
 		Integer count = null;

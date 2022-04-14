@@ -9,8 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginResp {
+	private Long id;
 
 	private boolean loginSuccess;
 
 	private String token;
+
+	private String image_url;
 }

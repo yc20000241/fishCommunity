@@ -12,6 +12,7 @@ import com.fish.community.demo.model.User;
 import com.fish.community.demo.model.UserExample;
 import com.fish.community.demo.req.UserReq;
 import com.fish.community.demo.resp.LoginResp;
+import com.fish.community.demo.util.CopyUtil;
 import com.fish.community.demo.util.SendQQEmailUtil;
 import com.fish.community.demo.util.SnowFlake;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +55,8 @@ public class LoginService {
 
 		user = putTokenToRedis(user);
 
+		loginResp = CopyUtil.copy(user, LoginResp.class);
 		loginResp.setLoginSuccess(true);
-		loginResp.setToken(user.getToken());
 
 		return loginResp;
 	}
@@ -71,9 +72,8 @@ public class LoginService {
 			throw new BusinessException(BusinessExceptionCode.USER_NOT_REGISTER);
 
 		user = putTokenToRedis(user);
+		loginResp = CopyUtil.copy(user, LoginResp.class);
 		loginResp.setLoginSuccess(true);
-		loginResp.setToken(user.getToken());
-
 		return loginResp;
 	}
 

@@ -59,8 +59,7 @@
   </select>
 
   <select id="getCountSearchPersonalArticleByKey" resultType="int">
-    select
-    <include refid="com.fish.community.demo.mapper.ArticlesMapper.Base_Column_List"/>
+    select count(*)
     from articles
     where title like concat('%',#{key},'%') and author = #{userId}
   </select>
