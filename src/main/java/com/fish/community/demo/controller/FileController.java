@@ -3,6 +3,7 @@ package com.fish.community.demo.controller;
 import com.fish.community.demo.exception.BusinessException;
 import com.fish.community.demo.exception.BusinessExceptionCode;
 import com.fish.community.demo.service.FileService;
+import com.fish.community.demo.util.KindUtil;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ public class FileController {
 	) throws IOException {
 		if(file.isEmpty())
 			throw new BusinessException(BusinessExceptionCode.UPLOAD_FILE_NOT_EMPTY);
+		KindUtil.isFileKind(kind);
 		return fileService.uploadFile(file, kind, request);
 	}
 

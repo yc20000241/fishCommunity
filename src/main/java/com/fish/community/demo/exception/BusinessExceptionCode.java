@@ -15,7 +15,8 @@ public enum BusinessExceptionCode {
     FILE_PATH_NOT_EXIST("文件路径不存在", 2010),
     COMMENTOR_NOT_EXISTS("评论人不存在", 2011),
     COMMENT_ARTICLE_NOT_EXISTS("评论文章不存在", 2012),
-    COMMENT_NOT_EXIST("此评论不存在", 2013)
+    COMMENT_NOT_EXIST("此评论不存在", 2013),
+    FILE_KIND_NOT_EXIST("此文件分类不存在",2014)
     ;
 
     private String desc;

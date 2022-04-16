@@ -31,11 +31,15 @@ public class CommentController {
 		return objectCommonResp;
 	}
 
-	@GetMapping("getCommentsList/{articleId}/{commentId}/{page}/{pageSize}")
+	@RequestMapping(value = {"getCommentsList/{articleId}/{commentId}/{page}/{pageSize}",
+			"getCommentsList/{articleId}/{page}","getCommentsList/{articleId}/{commentId}/{page}"}, method = RequestMethod.GET)
 	public CommonResp getCommentsList(@PathVariable("articleId") Long articleId,
 									  @PathVariable(value = "commentId", required = false) Long commentId,
 									  @PathVariable("page") Integer page,
-									  @PathVariable("pageSize") Integer pageSize){
+									  @PathVariable(value = "pageSize", required = false) Integer pageSize){
+		commentId = (commentId==null ? -1 : commentId);
+		pageSize = (pageSize==null ? 5 : pageSize);
+
 		CommentsResp comments = commentService.getCommentsList(articleId, commentId, page, pageSize);
 		CommonResp<CommentsResp> commentsRespCommonResp = new CommonResp<>();
 		commentsRespCommonResp.setContent(comments);

@@ -3,8 +3,6 @@ package com.fish.community.demo.model;
 public class User {
     private Long id;
 
-    private String name;
-
     private String password;
 
     private String email;
@@ -19,14 +17,6 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getPassword() {
@@ -68,7 +58,6 @@ public class User {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", name=").append(name);
         sb.append(", password=").append(password);
         sb.append(", email=").append(email);
         sb.append(", token=").append(token);

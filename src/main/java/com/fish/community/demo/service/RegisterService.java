@@ -88,7 +88,6 @@ public class RegisterService {
 			SnowFlake snowFlake = new SnowFlake(1, 1);
 			String userToken = snowFlake.nextId()+"";
 			user.setToken(userToken);
-			user.setName("未命名");
 			String defaultPassword = "123456";
 			user.setPassword(DigestUtils.md5DigestAsHex(defaultPassword.getBytes()));
 			user.setGmtCreate(System.currentTimeMillis()+"");

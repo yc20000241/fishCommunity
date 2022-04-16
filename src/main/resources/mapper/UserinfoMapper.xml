@@ -3,13 +3,14 @@
 <mapper namespace="com.fish.community.demo.mapper.UserinfoMapper">
   <resultMap id="BaseResultMap" type="com.fish.community.demo.model.Userinfo">
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="sex" jdbcType="INTEGER" property="sex" />
     <result column="page_views" jdbcType="INTEGER" property="pageViews" />
-    <result column="collect_count" jdbcType="INTEGER" property="collectCount" />
+    <result column="focus_on_count" jdbcType="INTEGER" property="focusOnCount" />
     <result column="img_url" jdbcType="VARCHAR" property="imgUrl" />
-  </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.fish.community.demo.model.Userinfo">
-    <result column="user_id" jdbcType="LONGVARCHAR" property="userId" />
+    <result column="followed_count" jdbcType="INTEGER" property="followedCount" />
+    <result column="sign" jdbcType="VARCHAR" property="sign" />
+    <result column="nick" jdbcType="VARCHAR" property="nick" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -70,27 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, sex, page_views, collect_count, img_url
+    id, user_id, sex, page_views, focus_on_count, img_url, followed_count, sign, nick
   </sql>
-  <sql id="Blob_Column_List">
-    user_id
-  </sql>
-  <select id="selectByExampleWithBLOBs" parameterType="com.fish.community.demo.model.UserinfoExample" resultMap="ResultMapWithBLOBs">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from userInfo
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
   <select id="selectByExample" parameterType="com.fish.community.demo.model.UserinfoExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -105,11 +87,9 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
     from userInfo
     where id = #{id,jdbcType=BIGINT}
   </select>
@@ -124,11 +104,13 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.fish.community.demo.model.Userinfo">
-    insert into userInfo (id, sex, page_views, 
-      collect_count, img_url, user_id
+    insert into userInfo (id, user_id, sex, 
+      page_views, focus_on_count, img_url, 
+      followed_count, sign, nick
       )
-    values (#{id,jdbcType=BIGINT}, #{sex,jdbcType=INTEGER}, #{pageViews,jdbcType=INTEGER}, 
-      #{collectCount,jdbcType=INTEGER}, #{imgUrl,jdbcType=VARCHAR}, #{userId,jdbcType=LONGVARCHAR}
+    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{sex,jdbcType=INTEGER}, 
+      #{pageViews,jdbcType=INTEGER}, #{focusOnCount,jdbcType=INTEGER}, #{imgUrl,jdbcType=VARCHAR}, 
+      #{followedCount,jdbcType=INTEGER}, #{sign,jdbcType=VARCHAR}, #{nick,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.fish.community.demo.model.Userinfo">
@@ -137,25 +119,37 @@
       <if test="id != null">
         id,
       </if>
+      <if test="userId != null">
+        user_id,
+      </if>
       <if test="sex != null">
         sex,
       </if>
       <if test="pageViews != null">
         page_views,
       </if>
-      <if test="collectCount != null">
-        collect_count,
+      <if test="focusOnCount != null">
+        focus_on_count,
       </if>
       <if test="imgUrl != null">
         img_url,
       </if>
-      <if test="userId != null">
-        user_id,
+      <if test="followedCount != null">
+        followed_count,
+      </if>
+      <if test="sign != null">
+        sign,
+      </if>
+      <if test="nick != null">
+        nick,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
       </if>
       <if test="sex != null">
         #{sex,jdbcType=INTEGER},
@@ -163,14 +157,20 @@
       <if test="pageViews != null">
         #{pageViews,jdbcType=INTEGER},
       </if>
-      <if test="collectCount != null">
-        #{collectCount,jdbcType=INTEGER},
+      <if test="focusOnCount != null">
+        #{focusOnCount,jdbcType=INTEGER},
       </if>
       <if test="imgUrl != null">
         #{imgUrl,jdbcType=VARCHAR},
       </if>
-      <if test="userId != null">
-        #{userId,jdbcType=LONGVARCHAR},
+      <if test="followedCount != null">
+        #{followedCount,jdbcType=INTEGER},
+      </if>
+      <if test="sign != null">
+        #{sign,jdbcType=VARCHAR},
+      </if>
+      <if test="nick != null">
+        #{nick,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -186,34 +186,31 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=BIGINT},
+      </if>
       <if test="record.sex != null">
         sex = #{record.sex,jdbcType=INTEGER},
       </if>
       <if test="record.pageViews != null">
         page_views = #{record.pageViews,jdbcType=INTEGER},
       </if>
-      <if test="record.collectCount != null">
-        collect_count = #{record.collectCount,jdbcType=INTEGER},
+      <if test="record.focusOnCount != null">
+        focus_on_count = #{record.focusOnCount,jdbcType=INTEGER},
       </if>
       <if test="record.imgUrl != null">
         img_url = #{record.imgUrl,jdbcType=VARCHAR},
       </if>
-      <if test="record.userId != null">
-        user_id = #{record.userId,jdbcType=LONGVARCHAR},
+      <if test="record.followedCount != null">
+        followed_count = #{record.followedCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.sign != null">
+        sign = #{record.sign,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nick != null">
+        nick = #{record.nick,jdbcType=VARCHAR},
       </if>
     </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExampleWithBLOBs" parameterType="map">
-    update userInfo
-    set id = #{record.id,jdbcType=BIGINT},
-      sex = #{record.sex,jdbcType=INTEGER},
-      page_views = #{record.pageViews,jdbcType=INTEGER},
-      collect_count = #{record.collectCount,jdbcType=INTEGER},
-      img_url = #{record.imgUrl,jdbcType=VARCHAR},
-      user_id = #{record.userId,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -221,10 +218,14 @@
   <update id="updateByExample" parameterType="map">
     update userInfo
     set id = #{record.id,jdbcType=BIGINT},
+      user_id = #{record.userId,jdbcType=BIGINT},
       sex = #{record.sex,jdbcType=INTEGER},
       page_views = #{record.pageViews,jdbcType=INTEGER},
-      collect_count = #{record.collectCount,jdbcType=INTEGER},
-      img_url = #{record.imgUrl,jdbcType=VARCHAR}
+      focus_on_count = #{record.focusOnCount,jdbcType=INTEGER},
+      img_url = #{record.imgUrl,jdbcType=VARCHAR},
+      followed_count = #{record.followedCount,jdbcType=INTEGER},
+      sign = #{record.sign,jdbcType=VARCHAR},
+      nick = #{record.nick,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -232,39 +233,43 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.fish.community.demo.model.Userinfo">
     update userInfo
     <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
       <if test="sex != null">
         sex = #{sex,jdbcType=INTEGER},
       </if>
       <if test="pageViews != null">
         page_views = #{pageViews,jdbcType=INTEGER},
       </if>
-      <if test="collectCount != null">
-        collect_count = #{collectCount,jdbcType=INTEGER},
+      <if test="focusOnCount != null">
+        focus_on_count = #{focusOnCount,jdbcType=INTEGER},
       </if>
       <if test="imgUrl != null">
         img_url = #{imgUrl,jdbcType=VARCHAR},
       </if>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=LONGVARCHAR},
+      <if test="followedCount != null">
+        followed_count = #{followedCount,jdbcType=INTEGER},
+      </if>
+      <if test="sign != null">
+        sign = #{sign,jdbcType=VARCHAR},
+      </if>
+      <if test="nick != null">
+        nick = #{nick,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.fish.community.demo.model.Userinfo">
-    update userInfo
-    set sex = #{sex,jdbcType=INTEGER},
-      page_views = #{pageViews,jdbcType=INTEGER},
-      collect_count = #{collectCount,jdbcType=INTEGER},
-      img_url = #{imgUrl,jdbcType=VARCHAR},
-      user_id = #{userId,jdbcType=LONGVARCHAR}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
   <update id="updateByPrimaryKey" parameterType="com.fish.community.demo.model.Userinfo">
     update userInfo
-    set sex = #{sex,jdbcType=INTEGER},
+    set user_id = #{userId,jdbcType=BIGINT},
+      sex = #{sex,jdbcType=INTEGER},
       page_views = #{pageViews,jdbcType=INTEGER},
-      collect_count = #{collectCount,jdbcType=INTEGER},
-      img_url = #{imgUrl,jdbcType=VARCHAR}
+      focus_on_count = #{focusOnCount,jdbcType=INTEGER},
+      img_url = #{imgUrl,jdbcType=VARCHAR},
+      followed_count = #{followedCount,jdbcType=INTEGER},
+      sign = #{sign,jdbcType=VARCHAR},
+      nick = #{nick,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

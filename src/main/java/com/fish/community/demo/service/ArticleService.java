@@ -6,10 +6,8 @@ import com.fish.community.demo.exception.BusinessExceptionCode;
 import com.fish.community.demo.mapper.ArticlesExtMapper;
 import com.fish.community.demo.mapper.ArticlesMapper;
 import com.fish.community.demo.mapper.UserMapper;
-import com.fish.community.demo.model.Articles;
-import com.fish.community.demo.model.ArticlesExample;
-import com.fish.community.demo.model.User;
-import com.fish.community.demo.model.UserExample;
+import com.fish.community.demo.mapper.UserinfoMapper;
+import com.fish.community.demo.model.*;
 import com.fish.community.demo.req.PublishArticleReq;
 import com.fish.community.demo.resp.ArticleDetailResp;
 import com.fish.community.demo.resp.ArticleListResp;
@@ -38,6 +36,9 @@ public class ArticleService {
 	@Autowired
 	private UserMapper userMapper;
 
+	@Autowired
+	private UserinfoMapper userinfoMapper;
+
 	public ArticleDetailResp getArticleDetail(long id) throws IOException {
 		ArticlesExample articlesExample = new ArticlesExample();
 		articlesExample.createCriteria().andIdEqualTo(id);
@@ -48,9 +49,9 @@ public class ArticleService {
 			throw new BusinessException(BusinessExceptionCode.ARTICLE_NOT_EXIst);
 		Articles article = articles.get(0);
 		//获取用户姓名
-		UserExample userExample = new UserExample();
-		userExample.createCriteria().andIdEqualTo(article.getAuthor());
-		User user = userMapper.selectByExample(userExample).get(0);
+		UserinfoExample userinfoExample = new UserinfoExample();
+		userinfoExample.createCriteria().andIdEqualTo(article.getAuthor());
+		Userinfo userinfo = userinfoMapper.selectByExample(userinfoExample).get(0);
 
 		//更新修改时间
 		Long modifyTime = System.currentTimeMillis();
@@ -58,13 +59,14 @@ public class ArticleService {
 		modifyTimeArticle.setGmtModifiedTime(System.currentTimeMillis()+"");
 		articlesMapper.updateByExampleSelective(modifyTimeArticle, articlesExample);
 
+
 		//返回文章详情
 		ArticleDetailResp articleDetailResp = CopyUtil.copy(article, ArticleDetailResp.class);
 		//将时间戳转换为日期格式
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		articleDetailResp.setCreateTime(dateFormat.format(Long.valueOf(article.getGmtCreateTime())));
 		articleDetailResp.setModifiedTime(dateFormat.format(modifyTime));
-		articleDetailResp.setAuthorName(user.getName());
+		articleDetailResp.setAuthorName(userinfo.getNick());
 		//从文件读取内容
 		articleDetailResp.setContent(FileUtil.ReadFile("./file"+articleDetailResp.getContent()));
 

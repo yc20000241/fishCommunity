@@ -3,15 +3,21 @@ package com.fish.community.demo.model;
 public class Userinfo {
     private Long id;
 
+    private Long userId;
+
     private Integer sex;
 
     private Integer pageViews;
 
-    private Integer collectCount;
+    private Integer focusOnCount;
 
     private String imgUrl;
 
-    private String userId;
+    private Integer followedCount;
+
+    private String sign;
+
+    private String nick;
 
     public Long getId() {
         return id;
@@ -19,6 +25,14 @@ public class Userinfo {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Integer getSex() {
@@ -37,12 +51,12 @@ public class Userinfo {
         this.pageViews = pageViews;
     }
 
-    public Integer getCollectCount() {
-        return collectCount;
+    public Integer getFocusOnCount() {
+        return focusOnCount;
     }
 
-    public void setCollectCount(Integer collectCount) {
-        this.collectCount = collectCount;
+    public void setFocusOnCount(Integer focusOnCount) {
+        this.focusOnCount = focusOnCount;
     }
 
     public String getImgUrl() {
@@ -53,12 +67,28 @@ public class Userinfo {
         this.imgUrl = imgUrl;
     }
 
-    public String getUserId() {
-        return userId;
+    public Integer getFollowedCount() {
+        return followedCount;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setFollowedCount(Integer followedCount) {
+        this.followedCount = followedCount;
+    }
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
+
+    public String getNick() {
+        return nick;
+    }
+
+    public void setNick(String nick) {
+        this.nick = nick;
     }
 
     @Override
@@ -68,11 +98,14 @@ public class Userinfo {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", userId=").append(userId);
         sb.append(", sex=").append(sex);
         sb.append(", pageViews=").append(pageViews);
-        sb.append(", collectCount=").append(collectCount);
+        sb.append(", focusOnCount=").append(focusOnCount);
         sb.append(", imgUrl=").append(imgUrl);
-        sb.append(", userId=").append(userId);
+        sb.append(", followedCount=").append(followedCount);
+        sb.append(", sign=").append(sign);
+        sb.append(", nick=").append(nick);
         sb.append("]");
         return sb.toString();
     }
