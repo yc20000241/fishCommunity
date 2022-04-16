@@ -65,18 +65,18 @@ public class ArticleController {
 		return listCommonResp;
 	}
 
-	@RequestMapping(value = {"/search/tag/{tag}/{currentPage}/{listSize}/{userId}/{sortKind}", "/search/tag/{tag}/{currentPage}/{listSize}/{sortKind}" }, method = RequestMethod.GET)
-	public CommonResp searchByTag(@PathVariable("tag") Integer tag,
-								  @PathVariable(value = "currentPage") Integer currentPage,
-								  @PathVariable(value = "listSize", required = false) Integer listSize,
-								  @PathVariable(value = "userId", required = false) Long userId,
-								  @PathVariable(value = "sortKind", required = false) Integer sortKind){
-		listSize = (listSize==null ? 5 : listSize);
-		sortKind = (sortKind<=0 || sortKind>4 ? 1 : sortKind);
-
-		ArticleListResp articleLists = articleService.searchByTag(tag, currentPage, listSize, userId, sortKind);
-		CommonResp<ArticleListResp> listCommonResp = new CommonResp<>();
-		listCommonResp.setContent(articleLists);
-		return listCommonResp;
-	}
+//	@RequestMapping(value = {"/search/tag/{tag}/{currentPage}/{listSize}/{userId}/{sortKind}", "/search/tag/{tag}/{currentPage}/{listSize}/{sortKind}" }, method = RequestMethod.GET)
+//	public CommonResp searchByTag(@PathVariable("tag") Integer tag,
+//								  @PathVariable(value = "currentPage") Integer currentPage,
+//								  @PathVariable(value = "listSize", required = false) Integer listSize,
+//								  @PathVariable(value = "userId", required = false) Long userId,
+//								  @PathVariable(value = "sortKind", required = false) Integer sortKind){
+//		listSize = (listSize==null ? 5 : listSize);
+//		sortKind = (sortKind<=0 || sortKind>4 ? 1 : sortKind);
+//
+//		ArticleListResp articleLists = articleService.searchByTag(tag, currentPage, listSize, userId, sortKind);
+//		CommonResp<ArticleListResp> listCommonResp = new CommonResp<>();
+//		listCommonResp.setContent(articleLists);
+//		return listCommonResp;
+//	}
 }

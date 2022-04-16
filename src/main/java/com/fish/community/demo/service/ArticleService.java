@@ -97,26 +97,24 @@ public class ArticleService {
 		article.setTag(publishArticleReq.getTag());
 		article.setContent("/article/"+articleContentFileName);
 		article.setArticleImg(publishArticleReq.getArticleImg());
+		article.setViewCount(0);
 
 		articlesMapper.insert(article);
 	}
 
 	public ArticleListResp getArticleLists(int currentPage, int listSize, Long userId, Integer sortKind) {
-
-		ArticlesExample articlesExample = new ArticlesExample();
 		PageHelper.startPage(currentPage, listSize);
 		List<Articles> articlesList = null;
+		String[][] orderByList = {{"gmt_create_time", "desc"},{"gmt_create_time", "asc"},
+				{"view_count", "desc"}, {"view_count","asc"}};
 
+		String isUserId = null;
 		if(userId == null){
-			articlesList = articlesExtMapper.selectAll();
+			isUserId = "";
 		}else{
-			articlesExample.createCriteria().andAuthorEqualTo(userId);
-			articlesList = articlesMapper.selectByExample(articlesExample);
+			isUserId = "where author="+userId;
 		}
-
-		//给列表按要求排序
-		articlesList = articleListSort(articlesList, sortKind);
-
+		articlesList = articlesExtMapper.selectAll(orderByList[sortKind-1][0],orderByList[sortKind-1][1], isUserId);
 		//将时间戳转为日期格式
 		articlesList = gmtTransToDateAndReadFile(articlesList,listSize);
 
@@ -145,19 +143,19 @@ public class ArticleService {
 	public ArticleListResp searchByKey(String key, Integer currentPage, Integer listSize, Long userId, Integer sortKind) {
 		List<Articles> articlesList = null;
 		Integer start = (currentPage-1)*listSize;
-		Integer total = 0;
-		if(userId == null){
-			articlesList = articlesExtMapper.searchArticleByKey(key, start, listSize);
-			//获取总条数
-			total = articlesExtMapper.getCountSearchArticleByKey(key);
-		}
-		else{
-			articlesList = articlesExtMapper.searchPersonalArticleByKey(key, start, listSize, userId);
-			total = articlesExtMapper.getCountSearchPersonalArticleByKey(key, userId);
-		}
-		//给列表按要求排序
-		articlesList = articleListSort(articlesList, sortKind);
+		String isUserId = null;
+		String[][] orderByList = {{"gmt_create_time", "desc"},{"gmt_create_time", "asc"},
+				{"view_count", "desc"}, {"view_count","asc"}};
 
+		if(userId == null)
+			isUserId = "";
+		else
+			isUserId = "and author="+userId;
+
+
+		articlesList = articlesExtMapper.searchArticleByKey(key, start, listSize, isUserId, orderByList[sortKind-1][0],orderByList[sortKind-1][1]);
+		//获取总条数
+		Integer total = articlesExtMapper.getCountSearchArticleByKey(key,isUserId);
 		//将时间戳改为日期模式
 		articlesList = gmtTransToDateAndReadFile(articlesList, listSize);
 
@@ -168,36 +166,24 @@ public class ArticleService {
 		return articleListResp;
 	}
 
-	private List<Articles> articleListSort(List<Articles> articlesList, Integer sortKind) {
-		if(sortKind == 1)//最新的在前面
-			articlesList.sort(Comparator.comparing(Articles::getGmtCreateTime).reversed());
-		else if(sortKind == 2)//最旧的在前面
-			articlesList.sort(Comparator.comparing(Articles::getGmtCreateTime));
-		else if(sortKind == 3)
-			articlesList.sort(Comparator.comparing(Articles::getViewCount));
-		else
-			articlesList.sort(Comparator.comparing(Articles::getViewCount).reversed());
 
-		return articlesList;
-	}
-
-	public ArticleListResp searchByTag(Integer tag, Integer currentPage, Integer listSize, Long userId, Integer sortKind) {
-		List<Articles> articlesList = null;
-		Integer start = (currentPage-1)*listSize;
-		Integer count = null;
-		if(userId == null){
-			articlesList = articlesExtMapper.searchArticleByTag(tag, start, listSize);
-			count = articlesExtMapper.getCountSearchArticleByTag(tag);
-		}
-		else{
-			articlesList = articlesExtMapper.searchPersonalArticleByTag(tag, start, listSize, userId);
-			count = articlesExtMapper.getCountSearchPersonalArticleByTag(tag, userId);
-		}
-		count = (count==null ? 0 : count);
-		ArticleListResp articleListResp = new ArticleListResp();
-		articleListResp.setArticles(articlesList);
-		articleListResp.setTotalArticlesCount((long)count);
-		return articleListResp;
-
-	}
+//	public ArticleListResp searchByTag(Integer tag, Integer currentPage, Integer listSize, Long userId, Integer sortKind) {
+//		List<Articles> articlesList = null;
+//		Integer start = (currentPage-1)*listSize;
+//		Integer count = null;
+//		if(userId == null){
+//			articlesList = articlesExtMapper.searchArticleByTag(tag, start, listSize);
+//			count = articlesExtMapper.getCountSearchArticleByTag(tag);
+//		}
+//		else{
+//			articlesList = articlesExtMapper.searchPersonalArticleByTag(tag, start, listSize, userId);
+//			count = articlesExtMapper.getCountSearchPersonalArticleByTag(tag, userId);
+//		}
+//		count = (count==null ? 0 : count);
+//		ArticleListResp articleListResp = new ArticleListResp();
+//		articleListResp.setArticles(articlesList);
+//		articleListResp.setTotalArticlesCount((long)count);
+//		return articleListResp;
+//
+//	}
 }

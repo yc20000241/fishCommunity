@@ -14,19 +14,11 @@ public interface ArticlesExtMapper {
 
     Articles getLast();
 
-    List<Articles> selectAll();
+    List<Articles> selectAll(String order, String descOrAsc, String isUserId);
 
-	int getTotalArticleCount();
+	List<Articles> searchArticleByKey(String key, Integer start, Integer listSize, String isUserId, String order, String descOrAsc);
 
-	int getTotalPersonalArticleCount(Long userId);
-
-	List<Articles> searchArticleByKey(String key, Integer start, Integer listSize);
-
-	List<Articles> searchPersonalArticleByKey(String key, Integer start, Integer listSize, Long userId);
-
-	Integer getCountSearchArticleByKey(String key);
-
-	Integer getCountSearchPersonalArticleByKey(String key, Long userId);
+	Integer getCountSearchArticleByKey(String key, String isUserId);
 
 	List<Articles> searchArticleByTag(Integer tag, Integer start, Integer listSize);
 
