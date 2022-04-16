@@ -11,3 +11,16 @@
 2022-04-16 16:15:41.358 INFO  s.d.s.w.r.operation.CachingOperationNameGenerator :40   [32m                  [0;39m Generating unique operation named: getArticleListsUsingGET_1
 2022-04-16 16:15:41.383 INFO  s.d.s.w.r.operation.CachingOperationNameGenerator :40   [32m                  [0;39m Generating unique operation named: searchByKeyUsingGET_1
 2022-04-16 16:15:41.510 INFO  com.fish.community.demo.DemoApplicationTests      :61   [32m                  [0;39m Started DemoApplicationTests in 8.178 seconds (JVM running for 9.377)
+2022-04-16 19:32:43.857 INFO  com.fish.community.demo.DemoApplicationTests      :55   [32m                  [0;39m Starting DemoApplicationTests using Java 1.8.0_181 on yc001 with PID 8108 (started by A in F:\springbootœÓƒø\œÃ”„…Á«¯)
+2022-04-16 19:32:43.877 INFO  org.hibernate.validator.internal.util.Version     :21   [32m                  [0;39m HV000001: Hibernate Validator 6.2.0.Final
+2022-04-16 19:32:43.910 INFO  com.fish.community.demo.DemoApplicationTests      :659  [32m                  [0;39m No active profile set, falling back to default profiles: default
+2022-04-16 19:32:45.544 INFO  o.s.d.r.config.RepositoryConfigurationDelegate    :262  [32m                  [0;39m Multiple Spring Data modules found, entering strict repository configuration mode!
+2022-04-16 19:32:45.549 INFO  o.s.d.r.config.RepositoryConfigurationDelegate    :132  [32m                  [0;39m Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2022-04-16 19:32:45.625 INFO  o.s.d.r.config.RepositoryConfigurationDelegate    :201  [32m                  [0;39m Finished Spring Data repository scanning in 48 ms. Found 0 Redis repository interfaces.
+2022-04-16 19:32:49.166 INFO  s.d.s.w.PropertySourcedRequestMappingHandlerMapping:69   [32m                  [0;39m Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2022-04-16 19:32:53.041 INFO  s.d.s.web.plugins.DocumentationPluginsBootstrapper:147  [32m                  [0;39m Context refreshed
+2022-04-16 19:32:53.075 INFO  s.d.s.web.plugins.DocumentationPluginsBootstrapper:150  [32m                  [0;39m Found 1 custom documentation plugin(s)
+2022-04-16 19:32:53.129 INFO  s.d.spring.web.scanners.ApiListingReferenceScanner:41   [32m                  [0;39m Scanning for api listing references
+2022-04-16 19:32:53.351 INFO  s.d.s.w.r.operation.CachingOperationNameGenerator :40   [32m                  [0;39m Generating unique operation named: getArticleListsUsingGET_1
+2022-04-16 19:32:53.378 INFO  s.d.s.w.r.operation.CachingOperationNameGenerator :40   [32m                  [0;39m Generating unique operation named: searchByKeyUsingGET_1
+2022-04-16 19:32:53.520 INFO  com.fish.community.demo.DemoApplicationTests      :61   [32m                  [0;39m Started DemoApplicationTests in 10.082 seconds (JVM running for 11.739)

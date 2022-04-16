@@ -11,7 +11,7 @@ public class User {
 
     private String token;
 
-    private String imageUrl;
+    private String gmtCreate;
 
     public Long getId() {
         return id;
@@ -53,12 +53,12 @@ public class User {
         this.token = token;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getGmtCreate() {
+        return gmtCreate;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setGmtCreate(String gmtCreate) {
+        this.gmtCreate = gmtCreate;
     }
 
     @Override
@@ -72,7 +72,7 @@ public class User {
         sb.append(", password=").append(password);
         sb.append(", email=").append(email);
         sb.append(", token=").append(token);
-        sb.append(", imageUrl=").append(imageUrl);
+        sb.append(", gmtCreate=").append(gmtCreate);
         sb.append("]");
         return sb.toString();
     }

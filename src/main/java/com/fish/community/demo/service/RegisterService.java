@@ -91,6 +91,7 @@ public class RegisterService {
 			user.setName("未命名");
 			String defaultPassword = "123456";
 			user.setPassword(DigestUtils.md5DigestAsHex(defaultPassword.getBytes()));
+			user.setGmtCreate(System.currentTimeMillis()+"");
 			//插入user注册信息
 			userMapper.insert(user);
 		}else

@@ -88,5 +88,4 @@ public class CommentService {
 			throw new BusinessException(BusinessExceptionCode.COMMENT_ARTICLE_NOT_EXISTS);
 	}
 
-
 }
