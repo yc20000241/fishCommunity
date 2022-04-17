@@ -283,6 +283,66 @@ public class UserRelationExample {
             addCriterion("followed_user not between", value1, value2, "followedUser");
             return (Criteria) this;
         }
+
+        public Criteria andIsFocusIsNull() {
+            addCriterion("is_focus is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFocusIsNotNull() {
+            addCriterion("is_focus is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFocusEqualTo(Integer value) {
+            addCriterion("is_focus =", value, "isFocus");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFocusNotEqualTo(Integer value) {
+            addCriterion("is_focus <>", value, "isFocus");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFocusGreaterThan(Integer value) {
+            addCriterion("is_focus >", value, "isFocus");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFocusGreaterThanOrEqualTo(Integer value) {
+            addCriterion("is_focus >=", value, "isFocus");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFocusLessThan(Integer value) {
+            addCriterion("is_focus <", value, "isFocus");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFocusLessThanOrEqualTo(Integer value) {
+            addCriterion("is_focus <=", value, "isFocus");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFocusIn(List<Integer> values) {
+            addCriterion("is_focus in", values, "isFocus");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFocusNotIn(List<Integer> values) {
+            addCriterion("is_focus not in", values, "isFocus");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFocusBetween(Integer value1, Integer value2) {
+            addCriterion("is_focus between", value1, value2, "isFocus");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFocusNotBetween(Integer value1, Integer value2) {
+            addCriterion("is_focus not between", value1, value2, "isFocus");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

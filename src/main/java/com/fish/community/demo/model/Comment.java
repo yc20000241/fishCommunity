@@ -11,11 +11,11 @@ public class Comment {
 
     private Long likeCount;
 
+    private String content;
+
     private Long commenterId;
 
     private Long articleId;
-
-    private String content;
 
     public Long getId() {
         return id;
@@ -57,6 +57,14 @@ public class Comment {
         this.likeCount = likeCount;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public Long getCommenterId() {
         return commenterId;
     }
@@ -73,14 +81,6 @@ public class Comment {
         this.articleId = articleId;
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -92,9 +92,9 @@ public class Comment {
         sb.append(", type=").append(type);
         sb.append(", gmtCreate=").append(gmtCreate);
         sb.append(", likeCount=").append(likeCount);
+        sb.append(", content=").append(content);
         sb.append(", commenterId=").append(commenterId);
         sb.append(", articleId=").append(articleId);
-        sb.append(", content=").append(content);
         sb.append("]");
         return sb.toString();
     }

@@ -5,6 +5,7 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="focus_on_user" jdbcType="BIGINT" property="focusOnUser" />
     <result column="followed_user" jdbcType="BIGINT" property="followedUser" />
+    <result column="is_focus" jdbcType="INTEGER" property="isFocus" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -65,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, focus_on_user, followed_user
+    id, focus_on_user, followed_user, is_focus
   </sql>
   <select id="selectByExample" parameterType="com.fish.community.demo.model.UserRelationExample" resultMap="BaseResultMap">
     select
@@ -98,10 +99,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.fish.community.demo.model.UserRelation">
-    insert into user_relation (id, focus_on_user, followed_user
-      )
-    values (#{id,jdbcType=BIGINT}, #{focusOnUser,jdbcType=BIGINT}, #{followedUser,jdbcType=BIGINT}
-      )
+    insert into user_relation (id, focus_on_user, followed_user, 
+      is_focus)
+    values (#{id,jdbcType=BIGINT}, #{focusOnUser,jdbcType=BIGINT}, #{followedUser,jdbcType=BIGINT}, 
+      #{isFocus,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.fish.community.demo.model.UserRelation">
     insert into user_relation
@@ -115,6 +116,9 @@
       <if test="followedUser != null">
         followed_user,
       </if>
+      <if test="isFocus != null">
+        is_focus,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -125,6 +129,9 @@
       </if>
       <if test="followedUser != null">
         #{followedUser,jdbcType=BIGINT},
+      </if>
+      <if test="isFocus != null">
+        #{isFocus,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -146,6 +153,9 @@
       <if test="record.followedUser != null">
         followed_user = #{record.followedUser,jdbcType=BIGINT},
       </if>
+      <if test="record.isFocus != null">
+        is_focus = #{record.isFocus,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -155,7 +165,8 @@
     update user_relation
     set id = #{record.id,jdbcType=BIGINT},
       focus_on_user = #{record.focusOnUser,jdbcType=BIGINT},
-      followed_user = #{record.followedUser,jdbcType=BIGINT}
+      followed_user = #{record.followedUser,jdbcType=BIGINT},
+      is_focus = #{record.isFocus,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -169,13 +180,17 @@
       <if test="followedUser != null">
         followed_user = #{followedUser,jdbcType=BIGINT},
       </if>
+      <if test="isFocus != null">
+        is_focus = #{isFocus,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.fish.community.demo.model.UserRelation">
     update user_relation
     set focus_on_user = #{focusOnUser,jdbcType=BIGINT},
-      followed_user = #{followedUser,jdbcType=BIGINT}
+      followed_user = #{followedUser,jdbcType=BIGINT},
+      is_focus = #{isFocus,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

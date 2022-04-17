@@ -50,7 +50,7 @@ public class ArticleService {
 		Articles article = articles.get(0);
 		//获取用户姓名
 		UserinfoExample userinfoExample = new UserinfoExample();
-		userinfoExample.createCriteria().andIdEqualTo(article.getAuthor());
+		userinfoExample.createCriteria().andUserIdEqualTo(article.getAuthor());
 		Userinfo userinfo = userinfoMapper.selectByExample(userinfoExample).get(0);
 
 		//更新修改时间

@@ -3,8 +3,13 @@ package com.fish.community.demo.mapper;
 import com.fish.community.demo.model.UserRelation;
 import com.fish.community.demo.model.UserRelationExample;
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
 
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Component;
+
+@Mapper
+@Component
 public interface UserRelationMapper {
     long countByExample(UserRelationExample example);
 

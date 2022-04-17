@@ -43,7 +43,7 @@
 
 <!--        <table tableName="user"/>-->
 <!--        <table tableName="userInfo"/>-->
-<!--        <table tableName="user_relation"/>-->
+        <table tableName="user_relation"/>
 <!--        <table tableName="articles"/>-->
 <!--        <table tableName="register_verification"/>-->
 <!--        <table tableName="comment"/>-->

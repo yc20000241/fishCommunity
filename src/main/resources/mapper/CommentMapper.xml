@@ -7,11 +7,9 @@
     <result column="type" jdbcType="INTEGER" property="type" />
     <result column="gmt_create" jdbcType="VARCHAR" property="gmtCreate" />
     <result column="like_count" jdbcType="BIGINT" property="likeCount" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="commenter_id" jdbcType="BIGINT" property="commenterId" />
     <result column="article_id" jdbcType="BIGINT" property="articleId" />
-  </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.fish.community.demo.model.Comment">
-    <result column="content" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -72,27 +70,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, parent_id, `type`, gmt_create, like_count, commenter_id, article_id
+    id, parent_id, `type`, gmt_create, like_count, content, commenter_id, article_id
   </sql>
-  <sql id="Blob_Column_List">
-    content
-  </sql>
-  <select id="selectByExampleWithBLOBs" parameterType="com.fish.community.demo.model.CommentExample" resultMap="ResultMapWithBLOBs">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from comment
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
   <select id="selectByExample" parameterType="com.fish.community.demo.model.CommentExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -107,11 +86,9 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
     from comment
     where id = #{id,jdbcType=BIGINT}
   </select>
@@ -127,11 +104,11 @@
   </delete>
   <insert id="insert" parameterType="com.fish.community.demo.model.Comment">
     insert into comment (id, parent_id, `type`, 
-      gmt_create, like_count, commenter_id, 
-      article_id, content)
+      gmt_create, like_count, content, 
+      commenter_id, article_id)
     values (#{id,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT}, #{type,jdbcType=INTEGER}, 
-      #{gmtCreate,jdbcType=VARCHAR}, #{likeCount,jdbcType=BIGINT}, #{commenterId,jdbcType=BIGINT}, 
-      #{articleId,jdbcType=BIGINT}, #{content,jdbcType=LONGVARCHAR})
+      #{gmtCreate,jdbcType=VARCHAR}, #{likeCount,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR}, 
+      #{commenterId,jdbcType=BIGINT}, #{articleId,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="com.fish.community.demo.model.Comment">
     insert into comment
@@ -151,14 +128,14 @@
       <if test="likeCount != null">
         like_count,
       </if>
+      <if test="content != null">
+        content,
+      </if>
       <if test="commenterId != null">
         commenter_id,
       </if>
       <if test="articleId != null">
         article_id,
-      </if>
-      <if test="content != null">
-        content,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -177,14 +154,14 @@
       <if test="likeCount != null">
         #{likeCount,jdbcType=BIGINT},
       </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
       <if test="commenterId != null">
         #{commenterId,jdbcType=BIGINT},
       </if>
       <if test="articleId != null">
         #{articleId,jdbcType=BIGINT},
-      </if>
-      <if test="content != null">
-        #{content,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -212,30 +189,16 @@
       <if test="record.likeCount != null">
         like_count = #{record.likeCount,jdbcType=BIGINT},
       </if>
+      <if test="record.content != null">
+        content = #{record.content,jdbcType=VARCHAR},
+      </if>
       <if test="record.commenterId != null">
         commenter_id = #{record.commenterId,jdbcType=BIGINT},
       </if>
       <if test="record.articleId != null">
         article_id = #{record.articleId,jdbcType=BIGINT},
       </if>
-      <if test="record.content != null">
-        content = #{record.content,jdbcType=LONGVARCHAR},
-      </if>
     </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExampleWithBLOBs" parameterType="map">
-    update comment
-    set id = #{record.id,jdbcType=BIGINT},
-      parent_id = #{record.parentId,jdbcType=BIGINT},
-      `type` = #{record.type,jdbcType=INTEGER},
-      gmt_create = #{record.gmtCreate,jdbcType=VARCHAR},
-      like_count = #{record.likeCount,jdbcType=BIGINT},
-      commenter_id = #{record.commenterId,jdbcType=BIGINT},
-      article_id = #{record.articleId,jdbcType=BIGINT},
-      content = #{record.content,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -247,6 +210,7 @@
       `type` = #{record.type,jdbcType=INTEGER},
       gmt_create = #{record.gmtCreate,jdbcType=VARCHAR},
       like_count = #{record.likeCount,jdbcType=BIGINT},
+      content = #{record.content,jdbcType=VARCHAR},
       commenter_id = #{record.commenterId,jdbcType=BIGINT},
       article_id = #{record.articleId,jdbcType=BIGINT}
     <if test="_parameter != null">
@@ -268,27 +232,16 @@
       <if test="likeCount != null">
         like_count = #{likeCount,jdbcType=BIGINT},
       </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
       <if test="commenterId != null">
         commenter_id = #{commenterId,jdbcType=BIGINT},
       </if>
       <if test="articleId != null">
         article_id = #{articleId,jdbcType=BIGINT},
       </if>
-      <if test="content != null">
-        content = #{content,jdbcType=LONGVARCHAR},
-      </if>
     </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.fish.community.demo.model.Comment">
-    update comment
-    set parent_id = #{parentId,jdbcType=BIGINT},
-      `type` = #{type,jdbcType=INTEGER},
-      gmt_create = #{gmtCreate,jdbcType=VARCHAR},
-      like_count = #{likeCount,jdbcType=BIGINT},
-      commenter_id = #{commenterId,jdbcType=BIGINT},
-      article_id = #{articleId,jdbcType=BIGINT},
-      content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.fish.community.demo.model.Comment">
@@ -297,6 +250,7 @@
       `type` = #{type,jdbcType=INTEGER},
       gmt_create = #{gmtCreate,jdbcType=VARCHAR},
       like_count = #{likeCount,jdbcType=BIGINT},
+      content = #{content,jdbcType=VARCHAR},
       commenter_id = #{commenterId,jdbcType=BIGINT},
       article_id = #{articleId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}

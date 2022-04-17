@@ -7,6 +7,7 @@
     <result column="type" jdbcType="INTEGER" property="type" />
     <result column="gmt_create" jdbcType="VARCHAR" property="gmtCreate" />
     <result column="like_count" jdbcType="BIGINT" property="likeCount" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="commenter_id" jdbcType="BIGINT" property="commenterId" />
     <result column="article_id" jdbcType="BIGINT" property="articleId" />
   </resultMap>
@@ -16,7 +17,7 @@
     <include refid="com.fish.community.demo.mapper.CommentMapper.Base_Column_List"/>
     from comment
     where article_id = #{articleId} and parent_id = #{commentId}
-    order by gmt_create
+    order by gmt_create desc
   </select>
 
 </mapper>

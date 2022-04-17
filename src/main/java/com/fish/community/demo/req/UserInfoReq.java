@@ -12,13 +12,14 @@ public class UserInfoReq {
 	private Long userId;
 
 	@NotEmpty
-	private String name;
+	private String nick;
+
+	private String newPassword;
 
 	@NotEmpty
 	private String password;
 
-	@NotEmpty
-	private String img_url;
+	private String imgUrl;
 
 	@NotNull
 	private Integer sex;

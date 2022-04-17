@@ -16,7 +16,15 @@ public enum BusinessExceptionCode {
     COMMENTOR_NOT_EXISTS("评论人不存在", 2011),
     COMMENT_ARTICLE_NOT_EXISTS("评论文章不存在", 2012),
     COMMENT_NOT_EXIST("此评论不存在", 2013),
-    FILE_KIND_NOT_EXIST("此文件分类不存在",2014)
+    FILE_KIND_NOT_EXIST("此文件分类不存在",2014),
+    USERID_OF_MOIDFY_INFO("修改用户信息的用户不存在", 2015),
+    PASSWORD_WRONG_OF_MODIFY_USEINFO("修改用户信息--原密码输入错误",2016),
+    USER_IMAGE_URL_NOT_EXIST("用户头像图片路径不存在", 2017),
+    USERID_OF_GET_INFO_NOT_EXIST("获取用户信息--用户id不存在",2018),
+    FOCUS_ON_USER_NOT_EXIST("关注者不存在", 2019),
+    FOLLOWED_USER_NOT_EXIST("被关注者不存在", 2020),
+    NOTFOCUS_AND_BEFORE_NOTFOCUS("已是未关注状态", 2021),
+    FOCUSED_AND_FOCUSING("已是关注状态", 2022)
     ;
 
     private String desc;

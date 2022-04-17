@@ -7,6 +7,8 @@ public class UserRelation {
 
     private Long followedUser;
 
+    private Integer isFocus;
+
     public Long getId() {
         return id;
     }
@@ -31,6 +33,14 @@ public class UserRelation {
         this.followedUser = followedUser;
     }
 
+    public Integer getIsFocus() {
+        return isFocus;
+    }
+
+    public void setIsFocus(Integer isFocus) {
+        this.isFocus = isFocus;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -40,6 +50,7 @@ public class UserRelation {
         sb.append(", id=").append(id);
         sb.append(", focusOnUser=").append(focusOnUser);
         sb.append(", followedUser=").append(followedUser);
+        sb.append(", isFocus=").append(isFocus);
         sb.append("]");
         return sb.toString();
     }

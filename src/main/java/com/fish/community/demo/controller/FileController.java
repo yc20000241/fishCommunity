@@ -24,7 +24,7 @@ public class FileController {
 	@PostMapping("/upload/{kind}")
 	@ApiOperation("上传文件")
 	public Object uploadFile(@ApiParam("文件") @RequestParam("file") MultipartFile file,
-							 @ApiParam("分类:img/article") @PathVariable("kind") String kind,
+							 @ApiParam("分类:img/article/userImage") @PathVariable("kind") String kind,
 							 HttpServletRequest request
 	) throws IOException {
 		if(file.isEmpty())
