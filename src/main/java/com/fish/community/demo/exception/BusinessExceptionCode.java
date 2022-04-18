@@ -24,7 +24,8 @@ public enum BusinessExceptionCode {
     FOCUS_ON_USER_NOT_EXIST("关注者不存在", 2019),
     FOLLOWED_USER_NOT_EXIST("被关注者不存在", 2020),
     NOTFOCUS_AND_BEFORE_NOTFOCUS("已是未关注状态", 2021),
-    FOCUSED_AND_FOCUSING("已是关注状态", 2022)
+    FOCUSED_AND_FOCUSING("已是关注状态", 2022),
+    PARENT_COMMENT_NOT_EXIST("父级评论不存在", 2023)
     ;
 
     private String desc;

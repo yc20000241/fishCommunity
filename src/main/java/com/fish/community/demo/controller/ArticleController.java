@@ -21,6 +21,12 @@ public class ArticleController {
 	@Autowired
 	private ArticleService articleService;
 
+	@GetMapping("/likeArticle/{id}")
+	public CommonResp likeArticle(@PathVariable("id") long id){
+		articleService.likeArticle(id);
+		return null;
+	}
+
 	@GetMapping("/getArticleDetail/{id}")
 	public CommonResp getArticleDetail(@PathVariable("id") long id) throws IOException {
 		ArticleDetailResp articleDetailResp = articleService.getArticleDetail(id);

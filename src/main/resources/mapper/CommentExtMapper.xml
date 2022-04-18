@@ -10,13 +10,24 @@
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="commenter_id" jdbcType="BIGINT" property="commenterId" />
     <result column="article_id" jdbcType="BIGINT" property="articleId" />
+    <result column="commented_id" jdbcType="BIGINT" property="commentedId" />
+    <result column="comment_count" jdbcType="BIGINT" property="commentCount" />
+    <result column="root_id" jdbcType="BIGINT" property="rootId" />
   </resultMap>
 
   <select id="selectByArticleIdAndCommentId" resultMap="BaseResultMap">
     select
     <include refid="com.fish.community.demo.mapper.CommentMapper.Base_Column_List"/>
     from comment
-    where article_id = #{articleId} and parent_id = #{commentId}
+    where article_id = #{articleId} and parent_id = #{parentId} and root_id = #{rootId}
+    order by gmt_create desc
+  </select>
+
+  <select id="selectByArticleIdAndRootId" resultMap="BaseResultMap">
+    select
+    <include refid="com.fish.community.demo.mapper.CommentMapper.Base_Column_List"/>
+    from comment
+    where article_id = #{articleId} and root_id = #{rootId}
     order by gmt_create desc
   </select>
 

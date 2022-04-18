@@ -17,6 +17,12 @@ public class Comment {
 
     private Long articleId;
 
+    private Long commentedId;
+
+    private Long commentCount;
+
+    private Long rootId;
+
     public Long getId() {
         return id;
     }
@@ -81,6 +87,30 @@ public class Comment {
         this.articleId = articleId;
     }
 
+    public Long getCommentedId() {
+        return commentedId;
+    }
+
+    public void setCommentedId(Long commentedId) {
+        this.commentedId = commentedId;
+    }
+
+    public Long getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(Long commentCount) {
+        this.commentCount = commentCount;
+    }
+
+    public Long getRootId() {
+        return rootId;
+    }
+
+    public void setRootId(Long rootId) {
+        this.rootId = rootId;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -95,6 +125,9 @@ public class Comment {
         sb.append(", content=").append(content);
         sb.append(", commenterId=").append(commenterId);
         sb.append(", articleId=").append(articleId);
+        sb.append(", commentedId=").append(commentedId);
+        sb.append(", commentCount=").append(commentCount);
+        sb.append(", rootId=").append(rootId);
         sb.append("]");
         return sb.toString();
     }

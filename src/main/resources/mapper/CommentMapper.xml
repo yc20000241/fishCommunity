@@ -10,6 +10,9 @@
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="commenter_id" jdbcType="BIGINT" property="commenterId" />
     <result column="article_id" jdbcType="BIGINT" property="articleId" />
+    <result column="commented_id" jdbcType="BIGINT" property="commentedId" />
+    <result column="comment_count" jdbcType="BIGINT" property="commentCount" />
+    <result column="root_id" jdbcType="BIGINT" property="rootId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -70,7 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, parent_id, `type`, gmt_create, like_count, content, commenter_id, article_id
+    id, parent_id, `type`, gmt_create, like_count, content, commenter_id, article_id, 
+    commented_id, comment_count, root_id
   </sql>
   <select id="selectByExample" parameterType="com.fish.community.demo.model.CommentExample" resultMap="BaseResultMap">
     select
@@ -105,10 +109,12 @@
   <insert id="insert" parameterType="com.fish.community.demo.model.Comment">
     insert into comment (id, parent_id, `type`, 
       gmt_create, like_count, content, 
-      commenter_id, article_id)
+      commenter_id, article_id, commented_id, 
+      comment_count, root_id)
     values (#{id,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT}, #{type,jdbcType=INTEGER}, 
       #{gmtCreate,jdbcType=VARCHAR}, #{likeCount,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR}, 
-      #{commenterId,jdbcType=BIGINT}, #{articleId,jdbcType=BIGINT})
+      #{commenterId,jdbcType=BIGINT}, #{articleId,jdbcType=BIGINT}, #{commentedId,jdbcType=BIGINT}, 
+      #{commentCount,jdbcType=BIGINT}, #{rootId,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="com.fish.community.demo.model.Comment">
     insert into comment
@@ -137,6 +143,15 @@
       <if test="articleId != null">
         article_id,
       </if>
+      <if test="commentedId != null">
+        commented_id,
+      </if>
+      <if test="commentCount != null">
+        comment_count,
+      </if>
+      <if test="rootId != null">
+        root_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -162,6 +177,15 @@
       </if>
       <if test="articleId != null">
         #{articleId,jdbcType=BIGINT},
+      </if>
+      <if test="commentedId != null">
+        #{commentedId,jdbcType=BIGINT},
+      </if>
+      <if test="commentCount != null">
+        #{commentCount,jdbcType=BIGINT},
+      </if>
+      <if test="rootId != null">
+        #{rootId,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -198,6 +222,15 @@
       <if test="record.articleId != null">
         article_id = #{record.articleId,jdbcType=BIGINT},
       </if>
+      <if test="record.commentedId != null">
+        commented_id = #{record.commentedId,jdbcType=BIGINT},
+      </if>
+      <if test="record.commentCount != null">
+        comment_count = #{record.commentCount,jdbcType=BIGINT},
+      </if>
+      <if test="record.rootId != null">
+        root_id = #{record.rootId,jdbcType=BIGINT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -212,7 +245,10 @@
       like_count = #{record.likeCount,jdbcType=BIGINT},
       content = #{record.content,jdbcType=VARCHAR},
       commenter_id = #{record.commenterId,jdbcType=BIGINT},
-      article_id = #{record.articleId,jdbcType=BIGINT}
+      article_id = #{record.articleId,jdbcType=BIGINT},
+      commented_id = #{record.commentedId,jdbcType=BIGINT},
+      comment_count = #{record.commentCount,jdbcType=BIGINT},
+      root_id = #{record.rootId,jdbcType=BIGINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -241,6 +277,15 @@
       <if test="articleId != null">
         article_id = #{articleId,jdbcType=BIGINT},
       </if>
+      <if test="commentedId != null">
+        commented_id = #{commentedId,jdbcType=BIGINT},
+      </if>
+      <if test="commentCount != null">
+        comment_count = #{commentCount,jdbcType=BIGINT},
+      </if>
+      <if test="rootId != null">
+        root_id = #{rootId,jdbcType=BIGINT},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -252,7 +297,10 @@
       like_count = #{likeCount,jdbcType=BIGINT},
       content = #{content,jdbcType=VARCHAR},
       commenter_id = #{commenterId,jdbcType=BIGINT},
-      article_id = #{articleId,jdbcType=BIGINT}
+      article_id = #{articleId,jdbcType=BIGINT},
+      commented_id = #{commentedId,jdbcType=BIGINT},
+      comment_count = #{commentCount,jdbcType=BIGINT},
+      root_id = #{rootId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

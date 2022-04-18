@@ -603,6 +603,186 @@ public class CommentExample {
             addCriterion("article_id not between", value1, value2, "articleId");
             return (Criteria) this;
         }
+
+        public Criteria andCommentedIdIsNull() {
+            addCriterion("commented_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentedIdIsNotNull() {
+            addCriterion("commented_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentedIdEqualTo(Long value) {
+            addCriterion("commented_id =", value, "commentedId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentedIdNotEqualTo(Long value) {
+            addCriterion("commented_id <>", value, "commentedId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentedIdGreaterThan(Long value) {
+            addCriterion("commented_id >", value, "commentedId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentedIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("commented_id >=", value, "commentedId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentedIdLessThan(Long value) {
+            addCriterion("commented_id <", value, "commentedId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentedIdLessThanOrEqualTo(Long value) {
+            addCriterion("commented_id <=", value, "commentedId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentedIdIn(List<Long> values) {
+            addCriterion("commented_id in", values, "commentedId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentedIdNotIn(List<Long> values) {
+            addCriterion("commented_id not in", values, "commentedId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentedIdBetween(Long value1, Long value2) {
+            addCriterion("commented_id between", value1, value2, "commentedId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentedIdNotBetween(Long value1, Long value2) {
+            addCriterion("commented_id not between", value1, value2, "commentedId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentCountIsNull() {
+            addCriterion("comment_count is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentCountIsNotNull() {
+            addCriterion("comment_count is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentCountEqualTo(Long value) {
+            addCriterion("comment_count =", value, "commentCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentCountNotEqualTo(Long value) {
+            addCriterion("comment_count <>", value, "commentCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentCountGreaterThan(Long value) {
+            addCriterion("comment_count >", value, "commentCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentCountGreaterThanOrEqualTo(Long value) {
+            addCriterion("comment_count >=", value, "commentCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentCountLessThan(Long value) {
+            addCriterion("comment_count <", value, "commentCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentCountLessThanOrEqualTo(Long value) {
+            addCriterion("comment_count <=", value, "commentCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentCountIn(List<Long> values) {
+            addCriterion("comment_count in", values, "commentCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentCountNotIn(List<Long> values) {
+            addCriterion("comment_count not in", values, "commentCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentCountBetween(Long value1, Long value2) {
+            addCriterion("comment_count between", value1, value2, "commentCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentCountNotBetween(Long value1, Long value2) {
+            addCriterion("comment_count not between", value1, value2, "commentCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdIsNull() {
+            addCriterion("root_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdIsNotNull() {
+            addCriterion("root_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdEqualTo(Long value) {
+            addCriterion("root_id =", value, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdNotEqualTo(Long value) {
+            addCriterion("root_id <>", value, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdGreaterThan(Long value) {
+            addCriterion("root_id >", value, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("root_id >=", value, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdLessThan(Long value) {
+            addCriterion("root_id <", value, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdLessThanOrEqualTo(Long value) {
+            addCriterion("root_id <=", value, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdIn(List<Long> values) {
+            addCriterion("root_id in", values, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdNotIn(List<Long> values) {
+            addCriterion("root_id not in", values, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdBetween(Long value1, Long value2) {
+            addCriterion("root_id between", value1, value2, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdNotBetween(Long value1, Long value2) {
+            addCriterion("root_id not between", value1, value2, "rootId");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

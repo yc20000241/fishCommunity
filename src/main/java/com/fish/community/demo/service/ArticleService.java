@@ -17,6 +17,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -39,6 +40,8 @@ public class ArticleService {
 	@Autowired
 	private UserinfoMapper userinfoMapper;
 
+
+	@Transactional
 	public ArticleDetailResp getArticleDetail(long id) throws IOException {
 		ArticlesExample articlesExample = new ArticlesExample();
 		articlesExample.createCriteria().andIdEqualTo(id);
@@ -59,6 +62,10 @@ public class ArticleService {
 		modifyTimeArticle.setGmtModifiedTime(System.currentTimeMillis()+"");
 		articlesMapper.updateByExampleSelective(modifyTimeArticle, articlesExample);
 
+		//文章浏览量加1
+		Articles articles1 = new Articles();
+		articles1.setViewCount(article.getViewCount()+1);
+		articlesMapper.updateByExampleSelective(articles1,articlesExample);
 
 		//返回文章详情
 		ArticleDetailResp articleDetailResp = CopyUtil.copy(article, ArticleDetailResp.class);
@@ -166,6 +173,11 @@ public class ArticleService {
 		articleListResp.setArticles(articlesList);
 		articleListResp.setTotalArticlesCount((long)total);
 		return articleListResp;
+	}
+
+	public void likeArticle(long id) {
+
+
 	}
 
 

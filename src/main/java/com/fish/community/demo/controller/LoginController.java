@@ -63,7 +63,7 @@ public class LoginController {
 
 		CommonResp commonResp = new CommonResp();
 
-		boolean isMatch = Pattern.matches("\\d{5,11}@qq\\.com", email);
+		boolean isMatch = Pattern.matches("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$", email);
 		if(!isMatch)
 			throw new BusinessException(BusinessExceptionCode.EMAIL_FORMAT_WRONG);
 

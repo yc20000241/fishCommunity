@@ -12,6 +12,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,53 +36,87 @@ public class CommentService {
 	@Autowired
 	private UserinfoMapper userinfoMapper;
 
+	@Transactional
 	public void sendComment(CommentReq commentReq) {
-		//查看parentId对应的评论是否存在，不存在则置为-1
-		if(commentReq.getParentId() != -1){
-			CommentExample commentExample = new CommentExample();
-			commentExample.createCriteria().andCommenterIdEqualTo(commentReq.getParentId());
-			List<Comment> comments = commentMapper.selectByExample(commentExample);
-			if(comments.isEmpty())
-				commentReq.setParentId((long)-1);
+		hasArticleId(commentReq.getArticleId());
+		hasUserId(commentReq.getCommenterId());
+		if(commentReq.getRootId() != -1){
+			hasUserId(commentReq.getCommentedId());
+			hasCommentId(commentReq.getRootId());
 		}
 
-		hasArticleId(commentReq.getArticleId());
+		if(commentReq.getParentId() != -1){
+			hasCommentId(commentReq.getParentId());
+		}else {// 将commentedId设为文章发布者的id
+			ArticlesExample articlesExample = new ArticlesExample();
+			articlesExample.createCriteria().andIdEqualTo(commentReq.getArticleId());
+			Articles articles = articlesMapper.selectByExample(articlesExample).get(0);
+			commentReq.setCommentedId(articles.getAuthor());
+		}
 
-		hasUserId(commentReq.getCommenterId());
 
 		Comment comment = CopyUtil.copy(commentReq, Comment.class);
 		comment.setGmtCreate(System.currentTimeMillis()+"");
 		comment.setLikeCount((long)0);
 		comment.setType(0);//0未读 1已读
-
+		comment.setCommentCount((long)0);
 		commentMapper.insert(comment);
+
+		//改变评论数
+		CommentExample commentExample = new CommentExample();
+		if(commentReq.getRootId()!=-1){//二级评论，增加一级评论数量
+			commentExample.createCriteria().andIdEqualTo(commentReq.getRootId());
+			Comment comment2 = commentMapper.selectByExample(commentExample).get(0);
+
+			Comment comment1 = new Comment();
+			comment1.setCommentCount(comment2.getCommentCount()+1);
+			commentMapper.updateByExampleSelective(comment1, commentExample);
+		}
 	}
 
-	public CommentsResp getCommentsList(Long articleId, Long commentId, Integer page, Integer pageSize) {
+	private void hasCommentId(Long rootId) {
+		CommentExample commentExample = new CommentExample();
+		commentExample.createCriteria().andIdEqualTo(rootId);
+		List<Comment> comments = commentMapper.selectByExample(commentExample);
+		if(comments.isEmpty())
+			throw new BusinessException(BusinessExceptionCode.PARENT_COMMENT_NOT_EXIST);
+	}
+
+	public CommentsResp getCommentsList(Long articleId, Long rootId, Integer page, Integer pageSize, Long parentId) {
 		//判断文章是否存在
 		hasArticleId(articleId);
 		//判断评论是否存在
-		if(commentId != -1){
+		if(rootId != -1){
 			CommentExample commentExample = new CommentExample();
-			commentExample.createCriteria().andIdEqualTo(commentId);
+			commentExample.createCriteria().andIdEqualTo(rootId);
 			List<Comment> comments = commentMapper.selectByExample(commentExample);
 			if(comments.isEmpty())
 				throw new BusinessException(BusinessExceptionCode.COMMENT_NOT_EXIST);
 		}
 
 		PageHelper.startPage(page, pageSize);
-		List<Comment> commentList = commentExtMapper.selectByArticleIdAndCommentId(articleId, commentId);
+		List<Comment> commentList = null;
+		if(rootId == -1)//根评论id为-1则返回一级评论
+			commentList = commentExtMapper.selectByArticleIdAndCommentId(articleId, rootId, parentId);
+		else//根评论id不为-1则返回多级评论
+			commentList = commentExtMapper.selectByArticleIdAndRootId(articleId, rootId);
 		PageInfo<Comment> objectPageInfo = new PageInfo<>(commentList);
 
-		UserinfoExample userinfoExample = new UserinfoExample();
 		List<CommentDTOResp> commentDTORespList = new ArrayList();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Userinfo userinfo = null;
 		for (Comment comment : commentList) {
 			CommentDTOResp commentDTOResp = CopyUtil.copy(comment, CommentDTOResp.class);
 			//查出评论人的相关信息
+			UserinfoExample userinfoExample = new UserinfoExample();
 			userinfoExample.createCriteria().andUserIdEqualTo(comment.getCommenterId());
-			Userinfo userinfo = userinfoMapper.selectByExample(userinfoExample).get(0);
-			commentDTOResp.setUserinfo(userinfo);
+			userinfo = userinfoMapper.selectByExample(userinfoExample).get(0);
+			commentDTOResp.setCommentUserInfo(userinfo);
+			//查出被评论人的相关信息
+			UserinfoExample userinfoExample1 = new UserinfoExample();
+			userinfoExample1.createCriteria().andUserIdEqualTo(comment.getCommentedId());
+			userinfo = userinfoMapper.selectByExample(userinfoExample1).get(0);
+			commentDTOResp.setCommentedUserInfo(userinfo);
 			//将时间戳改为日期格式
 			commentDTOResp.setGmtCreate(dateFormat.format(Long.valueOf(commentDTOResp.getGmtCreate())));
 			commentDTORespList.add(commentDTOResp);

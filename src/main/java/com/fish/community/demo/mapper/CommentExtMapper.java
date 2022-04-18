@@ -12,5 +12,7 @@ import java.util.List;
 @Mapper
 public interface CommentExtMapper {
 
-    List<Comment> selectByArticleIdAndCommentId(Long articleId, Long commentId);
+    List<Comment> selectByArticleIdAndCommentId(Long articleId, Long rootId, Long parentId);
+
+	List<Comment> selectByArticleIdAndRootId(Long articleId, Long rootId);
 }

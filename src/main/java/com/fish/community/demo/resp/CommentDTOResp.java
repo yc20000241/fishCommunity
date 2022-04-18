@@ -12,8 +12,10 @@ public class CommentDTOResp {
 	private Integer type;
 	private String gmtCreate;
 	private Long likeCount;
+	private Long commentCount;
 	private Long commenterId;
 	private Long articleId;
 	private String content;
-	private Userinfo userinfo;
+	private Userinfo commentUserInfo;
+	private Userinfo commentedUserInfo;
 }
