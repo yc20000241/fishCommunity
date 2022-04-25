@@ -3,16 +3,16 @@ package com.fish.community.demo.service;
 
 import com.fish.community.demo.exception.BusinessException;
 import com.fish.community.demo.exception.BusinessExceptionCode;
-import com.fish.community.demo.mapper.ArticlesExtMapper;
-import com.fish.community.demo.mapper.ArticlesMapper;
-import com.fish.community.demo.mapper.UserMapper;
-import com.fish.community.demo.mapper.UserinfoMapper;
+import com.fish.community.demo.mapper.*;
 import com.fish.community.demo.model.*;
 import com.fish.community.demo.req.PublishArticleReq;
+import com.fish.community.demo.resp.ActiveAuthorResp;
 import com.fish.community.demo.resp.ArticleDetailResp;
 import com.fish.community.demo.resp.ArticleListResp;
 import com.fish.community.demo.util.CopyUtil;
 import com.fish.community.demo.util.FileUtil;
+import com.fish.community.demo.util.RedisUtil;
+import com.fish.community.demo.util.RequestContext;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -40,6 +40,11 @@ public class ArticleService {
 	@Autowired
 	private UserinfoMapper userinfoMapper;
 
+	@Autowired
+	private RedisUtil redisUtil;
+
+	@Autowired
+	private UserExtMapper userExtMapper;
 
 	@Transactional
 	public ArticleDetailResp getArticleDetail(long id) throws IOException {
@@ -107,7 +112,8 @@ public class ArticleService {
 		article.setContent("/article/"+articleContentFileName);
 		article.setArticleImg(publishArticleReq.getArticleImg());
 		article.setViewCount(0);
-
+		article.setLikeCount(0);
+		article.setDislikeCount(0);
 		articlesMapper.insert(article);
 	}
 
@@ -176,28 +182,37 @@ public class ArticleService {
 	}
 
 	public void likeArticle(long id) {
-
-
+		String ip = RequestContext.getRemoteAddr();
+		if(redisUtil.validateRepeat("ARTICLE_LIKE"+id+"_"+ip, 3600*24))
+			articlesExtMapper.increaseLikeCount(id);
+		else
+			throw new BusinessException(BusinessExceptionCode.TODAY_HAS_LIKEN_THE_ARTICLE);
 	}
 
+	public List<Articles> recommend(Integer count, Integer tag) {
+		PageHelper.startPage(0, count);
+		List<Articles> articles = articlesExtMapper.recommend(tag);
+		return articles;
+	}
 
-//	public ArticleListResp searchByTag(Integer tag, Integer currentPage, Integer listSize, Long userId, Integer sortKind) {
-//		List<Articles> articlesList = null;
-//		Integer start = (currentPage-1)*listSize;
-//		Integer count = null;
-//		if(userId == null){
-//			articlesList = articlesExtMapper.searchArticleByTag(tag, start, listSize);
-//			count = articlesExtMapper.getCountSearchArticleByTag(tag);
-//		}
-//		else{
-//			articlesList = articlesExtMapper.searchPersonalArticleByTag(tag, start, listSize, userId);
-//			count = articlesExtMapper.getCountSearchPersonalArticleByTag(tag, userId);
-//		}
-//		count = (count==null ? 0 : count);
-//		ArticleListResp articleListResp = new ArticleListResp();
-//		articleListResp.setArticles(articlesList);
-//		articleListResp.setTotalArticlesCount((long)count);
-//		return articleListResp;
-//
-//	}
+	public List<User> activeAuthor(Integer count) {
+		//获取前几条文章数最多的作者id
+		PageHelper.startPage(0, count);
+		ActiveAuthorResp[] authors = articlesExtMapper.activeAuthor();
+		ArrayList<Long> longs = new ArrayList<>();
+		for (ActiveAuthorResp author : authors) {
+			longs.add(author.getAuthor());
+		}
+		//根据userId数组返回users
+		List<User> users = userExtMapper.selectIdIn(longs);
+		return users;
+	}
+
+	public void disLikeArticle(long id) {
+		String ip = RequestContext.getRemoteAddr();
+		if(redisUtil.validateRepeat("ARTICLE_LIKE"+id+"_"+ip, 3600*24))
+			articlesExtMapper.decreaseLikeCount(id);
+		else
+			throw new BusinessException(BusinessExceptionCode.TODAY_HAS_LIKEN_THE_ARTICLE);
+	}
 }

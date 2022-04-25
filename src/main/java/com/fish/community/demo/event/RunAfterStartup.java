@@ -8,22 +8,24 @@ import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.TimeUnit;
+
 @Component
 public class RunAfterStartup {
 
 	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
 
-	@EventListener(ApplicationReadyEvent.class)
-	public void runAfterStartup() {
-		if(FileUtil.fileIsExist("./file/userToken/userToken.txt")){
-			String s = FileUtil.ReadFile("./file/userToken/userToken.txt");
-			String[] split = s.split("\\n");
-			for (int i = 0; i < split.length; i += 2){
-				stringRedisTemplate.opsForValue().set(split[i],split[i+1]);
-			}
-		}
+//	@EventListener(ApplicationReadyEvent.class)
+//	public void runAfterStartup() {
+//		if(FileUtil.fileIsExist("./file/userToken/userToken.txt")){
+//			String s = FileUtil.ReadFile("./file/userToken/userToken.txt");
+//			String[] split = s.split("\\n");
+//			for (int i = 0; i < split.length; i += 2){
+//				stringRedisTemplate.opsForValue().set(split[i],split[i+1],3600 * 24 * 7, TimeUnit.SECONDS);
+//			}
+//		}
 
 
-	}
+//	}
 }

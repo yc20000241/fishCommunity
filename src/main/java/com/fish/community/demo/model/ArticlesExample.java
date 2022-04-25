@@ -753,6 +753,66 @@ public class ArticlesExample {
             addCriterion("article_img not between", value1, value2, "articleImg");
             return (Criteria) this;
         }
+
+        public Criteria andDislikeCountIsNull() {
+            addCriterion("dislike_count is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDislikeCountIsNotNull() {
+            addCriterion("dislike_count is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDislikeCountEqualTo(Integer value) {
+            addCriterion("dislike_count =", value, "dislikeCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andDislikeCountNotEqualTo(Integer value) {
+            addCriterion("dislike_count <>", value, "dislikeCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andDislikeCountGreaterThan(Integer value) {
+            addCriterion("dislike_count >", value, "dislikeCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andDislikeCountGreaterThanOrEqualTo(Integer value) {
+            addCriterion("dislike_count >=", value, "dislikeCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andDislikeCountLessThan(Integer value) {
+            addCriterion("dislike_count <", value, "dislikeCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andDislikeCountLessThanOrEqualTo(Integer value) {
+            addCriterion("dislike_count <=", value, "dislikeCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andDislikeCountIn(List<Integer> values) {
+            addCriterion("dislike_count in", values, "dislikeCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andDislikeCountNotIn(List<Integer> values) {
+            addCriterion("dislike_count not in", values, "dislikeCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andDislikeCountBetween(Integer value1, Integer value2) {
+            addCriterion("dislike_count between", value1, value2, "dislikeCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andDislikeCountNotBetween(Integer value1, Integer value2) {
+            addCriterion("dislike_count not between", value1, value2, "dislikeCount");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

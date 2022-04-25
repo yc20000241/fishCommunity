@@ -2,6 +2,7 @@ package com.fish.community.demo.mapper;
 
 import com.fish.community.demo.model.Articles;
 import com.fish.community.demo.model.ArticlesExample;
+import com.fish.community.demo.resp.ActiveAuthorResp;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
@@ -20,11 +21,13 @@ public interface ArticlesExtMapper {
 
 	Integer getCountSearchArticleByKey(String key, String isUserId);
 
-	List<Articles> searchArticleByTag(Integer tag, Integer start, Integer listSize);
+	void increaseLikeCount(long id);
 
-	List<Articles> searchPersonalArticleByTag(Integer tag, Integer start, Integer listSize, Long userId);
+	List<Articles> selectHotArticle();
 
-	Integer getCountSearchArticleByTag(Integer tag);
+	List<Articles> recommend(Integer tag);
 
-	Integer getCountSearchPersonalArticleByTag(Integer tag, Long userId);
+	ActiveAuthorResp[] activeAuthor();
+
+	void decreaseLikeCount(long id);
 }

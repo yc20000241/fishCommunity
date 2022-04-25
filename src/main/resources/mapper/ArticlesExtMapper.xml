@@ -45,31 +45,35 @@
 
   </select>
 
-  <select id="searchArticleByTag" resultMap="BaseResultMap">
-    select
-    <include refid="com.fish.community.demo.mapper.ArticlesMapper.Base_Column_List"/>
+  <update id="increaseLikeCount">
+    update articles
+    set like_count = like_count+1
+    where id = #{id}
+  </update>
+
+  <select id="selectHotArticle" resultMap="BaseResultMap">
+    select *
+    from articles
+    order by view_count desc
+  </select>
+
+  <select id="recommend" resultMap="BaseResultMap">
+    select *
     from articles
     where tag = #{tag}
-    limit #{start}, #{listSize}
+    order by view_count desc
   </select>
 
-  <select id="getCountSearchArticleByTag" resultType="int">
-    select count(*)
+  <select id="activeAuthor" resultType="com.fish.community.demo.resp.ActiveAuthorResp">
+    select count(*) as articleCount, author
     from articles
-    where tag = #{tag}
+    group by author
+    order by articleCount desc
   </select>
 
-  <select id="searchPersonalArticleByTag" resultMap="BaseResultMap">
-    select
-    <include refid="com.fish.community.demo.mapper.ArticlesMapper.Base_Column_List"/>
-    from articles
-    where tag = #{tag} and author = #{userId}
-    limit #{start}, #{listSize}
-  </select>
-
-  <select id="getCountSearchPersonalArticleByTag" resultType="int">
-    select count(*)
-    from articles
-    where tag = #{tag} and author = #{userId}
-  </select>
+  <update id="decreaseLikeCount">
+    update articles
+    set dislike_count = dislike_count+1
+    where id = #{id}
+  </update>
 </mapper>

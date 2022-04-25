@@ -1,42 +1,38 @@
 package com.fish.community.demo.controller;
 
-import com.fish.community.demo.mapper.UserMapper;
-import com.fish.community.demo.model.User;
-import com.fish.community.demo.model.UserExample;
+import com.fish.community.demo.model.Articles;
+import com.fish.community.demo.resp.CommonResp;
+import com.fish.community.demo.service.IndexService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
 @Controller
 @ResponseBody
+@RequestMapping("/index")
 public class IndexController {
 
-
 	@Autowired
-	private StringRedisTemplate redisTemplate;
+	private IndexService indexService;
 
-	@RequestMapping(value = "/test",method = RequestMethod.GET)
-	public String test(){
-//		UserExample userExample = new UserExample();
-//		UserExample.Criteria criteria = userExample.createCriteria();
-//		criteria.andIdEqualTo((long) 1);
-//		List<User> users = userMapper.selectByExample(userExample);
-//		redisTemplate.opsForValue().set("key2","yc002");
-//		System.out.println(redisTemplate.opsForValue().get("key1"));
-//		return users.get(0);
-		return "test";
+	@GetMapping("/hotArticle/{count}")
+	public CommonResp hotArticle(@PathVariable("count") Integer count, HttpServletRequest request){
+		List<Articles> articles = indexService.hotArticle(count, request);
+		CommonResp<List<Articles>> listCommonResp = new CommonResp<>();
+		listCommonResp.setContent(articles);
+		return listCommonResp;
 	}
 
-	@RequestMapping(value = "/",method = RequestMethod.GET)
-	public String test1(){
-//		System.out.println(redisTemplate.opsForValue().get("key2"));
-		System.out.println(System.currentTimeMillis());
-		return "index";
+	@GetMapping("/todayVisit")
+	public CommonResp todayVisit(){
+		Integer todayVisit = indexService.todayVisit();
+		CommonResp<Integer> integerCommonResp = new CommonResp<>();
+		integerCommonResp.setContent(todayVisit);
+		return integerCommonResp;
 	}
 
 }

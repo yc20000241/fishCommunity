@@ -157,7 +157,7 @@ public class LoginService {
 		List<User> users = userMapper.selectByExample(userExample);
 
 		if(users.isEmpty()){
-			return null;
+			throw new BusinessException(BusinessExceptionCode.USER_NOT_REGISTER);
 		}else
 			return users.get(0);
 	}

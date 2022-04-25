@@ -1,5 +1,9 @@
 package com.fish.community.demo.controller;
 
+import com.fish.community.demo.exception.BusinessException;
+import com.fish.community.demo.exception.BusinessExceptionCode;
+import com.fish.community.demo.model.Articles;
+import com.fish.community.demo.model.User;
 import com.fish.community.demo.req.PublishArticleReq;
 import com.fish.community.demo.resp.ArticleDetailResp;
 import com.fish.community.demo.resp.ArticleListResp;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 
@@ -24,7 +29,8 @@ public class ArticleController {
 	@GetMapping("/likeArticle/{id}")
 	public CommonResp likeArticle(@PathVariable("id") long id){
 		articleService.likeArticle(id);
-		return null;
+		CommonResp<Object> objectCommonResp = new CommonResp<>();
+		return objectCommonResp;
 	}
 
 	@GetMapping("/getArticleDetail/{id}")
@@ -71,18 +77,31 @@ public class ArticleController {
 		return listCommonResp;
 	}
 
-//	@RequestMapping(value = {"/search/tag/{tag}/{currentPage}/{listSize}/{userId}/{sortKind}", "/search/tag/{tag}/{currentPage}/{listSize}/{sortKind}" }, method = RequestMethod.GET)
-//	public CommonResp searchByTag(@PathVariable("tag") Integer tag,
-//								  @PathVariable(value = "currentPage") Integer currentPage,
-//								  @PathVariable(value = "listSize", required = false) Integer listSize,
-//								  @PathVariable(value = "userId", required = false) Long userId,
-//								  @PathVariable(value = "sortKind", required = false) Integer sortKind){
-//		listSize = (listSize==null ? 5 : listSize);
-//		sortKind = (sortKind<=0 || sortKind>4 ? 1 : sortKind);
-//
-//		ArticleListResp articleLists = articleService.searchByTag(tag, currentPage, listSize, userId, sortKind);
-//		CommonResp<ArticleListResp> listCommonResp = new CommonResp<>();
-//		listCommonResp.setContent(articleLists);
-//		return listCommonResp;
-//	}
+	@GetMapping("/recommend/{tag}/{count}")
+	public CommonResp recommend(@PathVariable("count") Integer count,
+								@PathVariable("tag") Integer tag){
+		if(tag == null || tag > 3 || tag < 0)
+			throw new BusinessException(BusinessExceptionCode.ARTICLE_TAG_NOT_EXIST);
+
+		List<Articles> articles = articleService.recommend(count, tag);
+		CommonResp<List<Articles>> listCommonResp = new CommonResp<>();
+		listCommonResp.setContent(articles);
+		return listCommonResp;
+	}
+
+	@GetMapping("/activeAuthor/{count}")
+	public CommonResp activeAuthor(@PathVariable("count") Integer count){
+		List<User> users = articleService.activeAuthor(count);
+		CommonResp<List<User>> listCommonResp = new CommonResp<>();
+		listCommonResp.setContent(users);
+		return listCommonResp;
+	}
+
+	@GetMapping("/disLikeArticle/{id}")
+	public CommonResp disLikeArticle(@PathVariable("id") long id){
+		articleService.disLikeArticle(id);
+		CommonResp<Object> objectCommonResp = new CommonResp<>();
+		return objectCommonResp;
+	}
+
 }

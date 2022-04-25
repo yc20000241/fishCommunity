@@ -12,6 +12,7 @@
     <result column="like_count" jdbcType="INTEGER" property="likeCount" />
     <result column="tag" jdbcType="INTEGER" property="tag" />
     <result column="article_img" jdbcType="VARCHAR" property="articleImg" />
+    <result column="dislike_count" jdbcType="INTEGER" property="dislikeCount" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -73,7 +74,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, title, content, gmt_create_time, gmt_modified_time, author, view_count, like_count, 
-    tag, article_img
+    tag, article_img, dislike_count
   </sql>
   <select id="selectByExample" parameterType="com.fish.community.demo.model.ArticlesExample" resultMap="BaseResultMap">
     select
@@ -109,11 +110,11 @@
     insert into articles (id, title, content, 
       gmt_create_time, gmt_modified_time, author, 
       view_count, like_count, tag, 
-      article_img)
+      article_img, dislike_count)
     values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
       #{gmtCreateTime,jdbcType=VARCHAR}, #{gmtModifiedTime,jdbcType=VARCHAR}, #{author,jdbcType=BIGINT}, 
       #{viewCount,jdbcType=INTEGER}, #{likeCount,jdbcType=INTEGER}, #{tag,jdbcType=INTEGER}, 
-      #{articleImg,jdbcType=VARCHAR})
+      #{articleImg,jdbcType=VARCHAR}, #{dislikeCount,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.fish.community.demo.model.Articles">
     insert into articles
@@ -148,6 +149,9 @@
       <if test="articleImg != null">
         article_img,
       </if>
+      <if test="dislikeCount != null">
+        dislike_count,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -179,6 +183,9 @@
       </if>
       <if test="articleImg != null">
         #{articleImg,jdbcType=VARCHAR},
+      </if>
+      <if test="dislikeCount != null">
+        #{dislikeCount,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -221,6 +228,9 @@
       <if test="record.articleImg != null">
         article_img = #{record.articleImg,jdbcType=VARCHAR},
       </if>
+      <if test="record.dislikeCount != null">
+        dislike_count = #{record.dislikeCount,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -237,7 +247,8 @@
       view_count = #{record.viewCount,jdbcType=INTEGER},
       like_count = #{record.likeCount,jdbcType=INTEGER},
       tag = #{record.tag,jdbcType=INTEGER},
-      article_img = #{record.articleImg,jdbcType=VARCHAR}
+      article_img = #{record.articleImg,jdbcType=VARCHAR},
+      dislike_count = #{record.dislikeCount,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -272,6 +283,9 @@
       <if test="articleImg != null">
         article_img = #{articleImg,jdbcType=VARCHAR},
       </if>
+      <if test="dislikeCount != null">
+        dislike_count = #{dislikeCount,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -285,7 +299,8 @@
       view_count = #{viewCount,jdbcType=INTEGER},
       like_count = #{likeCount,jdbcType=INTEGER},
       tag = #{tag,jdbcType=INTEGER},
-      article_img = #{articleImg,jdbcType=VARCHAR}
+      article_img = #{articleImg,jdbcType=VARCHAR},
+      dislike_count = #{dislikeCount,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

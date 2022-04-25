@@ -2,7 +2,6 @@ package com.fish.community.demo.config;
 
 
 import com.fish.community.demo.interceptor.LoginInterceptor;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -18,6 +17,7 @@ public class SpringMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+
         registry.addInterceptor(loginInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns(
@@ -29,7 +29,8 @@ public class SpringMvcConfig implements WebMvcConfigurer {
                         "/error",
                         "/favicon.ico",
                         "/file/image/**",
-                        "/article/getArticleLists/**"
+                        "/article/getArticleLists/**",
+                        "/index/**"
                 );
     }
 

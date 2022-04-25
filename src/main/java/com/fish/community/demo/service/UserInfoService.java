@@ -13,6 +13,7 @@ import com.fish.community.demo.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 
 import java.util.List;
 
@@ -50,15 +51,25 @@ public class UserInfoService {
 			throw new BusinessException(BusinessExceptionCode.USERID_OF_MOIDFY_INFO);
 
 		//查看原密码是否正确
-		User user = users.get(0);
-		if(!userInfoReq.getPassword().equals(user.getPassword()))
-			throw new BusinessException(BusinessExceptionCode.USERID_OF_MOIDFY_INFO);
+		if(userInfoReq.getPassword() != null && !userInfoReq.getPassword().equals("")){
+			User user = users.get(0);
+			if(!userInfoReq.getPassword().equals(user.getPassword()))
+				throw new BusinessException(BusinessExceptionCode.USERID_OF_MOIDFY_INFO);
+			//查看新密码是否为空
+			if(userInfoReq.getNewPassword() == null || userInfoReq.getNewPassword().equals(""))
+				throw new BusinessException(BusinessExceptionCode.MODIFY_USERINFO_NEW_PASSOWRD_EMPTY);
+			//加密并更新密码
+			User user1 = new User();
+			user1.setPassword(userInfoReq.getNewPassword());
+			userMapper.updateByExampleSelective(user1, userExample);
+		}
 
-
-		//查看头像图片是否存在
-		String imgUrl = userInfoReq.getImgUrl();
-		if (imgUrl!=null && !imgUrl.isEmpty() && !FileUtil.fileIsExist(imgUrl))
-			throw new BusinessException(BusinessExceptionCode.USER_IMAGE_URL_NOT_EXIST);
+		if(userInfoReq.getImgUrl() != null){
+			//查看头像图片是否存在
+			String imgUrl = userInfoReq.getImgUrl();
+			if (imgUrl!=null && !imgUrl.isEmpty() && !FileUtil.fileIsExist(imgUrl))
+				throw new BusinessException(BusinessExceptionCode.USER_IMAGE_URL_NOT_EXIST);
+		}
 
 		Userinfo userinfo = CopyUtil.copy(userInfoReq, Userinfo.class);
 		UserinfoExample userinfoExample = new UserinfoExample();

@@ -16,7 +16,6 @@ public class UserInfoReq {
 
 	private String newPassword;
 
-	@NotEmpty
 	private String password;
 
 	private String imgUrl;
@@ -24,6 +23,5 @@ public class UserInfoReq {
 	@NotNull
 	private Integer sex;
 
-	@NotEmpty
 	private String sign;
 }
