@@ -4,11 +4,14 @@ import com.fish.community.demo.model.Userinfo;
 import com.fish.community.demo.req.FocusUserReq;
 import com.fish.community.demo.req.UserInfoReq;
 import com.fish.community.demo.resp.CommonResp;
+import com.fish.community.demo.resp.UserInfoResp;
 import com.fish.community.demo.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @ResponseBody
@@ -28,10 +31,9 @@ public class UserInfoController {
 	}
 
 	@GetMapping("/getUserInfo/{userId}")
-	public CommonResp getUserInfo(@PathVariable("userId") long userId){
-
-		Userinfo userinfo = userInfoService.getUserInfo(userId);
-		CommonResp<Userinfo> userinfoCommonResp = new CommonResp<>();
+	public CommonResp getUserInfo(@PathVariable("userId") long userId, HttpServletRequest request){
+		UserInfoResp userinfo = userInfoService.getUserInfo(userId, request);
+		CommonResp<UserInfoResp> userinfoCommonResp = new CommonResp<>();
 		userinfoCommonResp.setContent(userinfo);
 		return userinfoCommonResp;
 	}

@@ -1,0 +1,1 @@
+import{r as a,a6 as o,a7 as r}from"./vendor.e2990882.js";function n(){const u=a(-1),e=o(()=>u.value<0?"\u83B7\u53D6\u9A8C\u8BC1\u7801":`${u.value} s`);return r(u,t=>{t!==-1&&setTimeout(()=>{u.value--},1e3)}),{cutDown:u,codeMessage:e}}export{n as u};

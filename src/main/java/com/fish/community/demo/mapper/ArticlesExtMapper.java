@@ -30,4 +30,6 @@ public interface ArticlesExtMapper {
 	ActiveAuthorResp[] activeAuthor();
 
 	void decreaseLikeCount(long id);
+
+	Integer getCountByAuthor(Long userId);
 }

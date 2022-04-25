@@ -6,7 +6,6 @@
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="token" jdbcType="VARCHAR" property="token" />
-    <result column="gmt_create" jdbcType="VARCHAR" property="gmtCreate" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, `password`, email, token, gmt_create
+    id, `password`, email, token
   </sql>
   <select id="selectByExample" parameterType="com.fish.community.demo.model.UserExample" resultMap="BaseResultMap">
     select
@@ -91,9 +90,9 @@
   </delete>
   <insert id="insert" parameterType="com.fish.community.demo.model.User">
     insert into user (id, `password`, email, 
-      token, gmt_create)
+      token)
     values (#{id,jdbcType=BIGINT}, #{password,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
-      #{token,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=VARCHAR})
+      #{token,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.fish.community.demo.model.User">
     insert into user
@@ -110,9 +109,6 @@
       <if test="token != null">
         token,
       </if>
-      <if test="gmtCreate != null">
-        gmt_create,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -126,9 +122,6 @@
       </if>
       <if test="token != null">
         #{token,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtCreate != null">
-        #{gmtCreate,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -153,9 +146,6 @@
       <if test="record.token != null">
         token = #{record.token,jdbcType=VARCHAR},
       </if>
-      <if test="record.gmtCreate != null">
-        gmt_create = #{record.gmtCreate,jdbcType=VARCHAR},
-      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -166,8 +156,7 @@
     set id = #{record.id,jdbcType=BIGINT},
       `password` = #{record.password,jdbcType=VARCHAR},
       email = #{record.email,jdbcType=VARCHAR},
-      token = #{record.token,jdbcType=VARCHAR},
-      gmt_create = #{record.gmtCreate,jdbcType=VARCHAR}
+      token = #{record.token,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

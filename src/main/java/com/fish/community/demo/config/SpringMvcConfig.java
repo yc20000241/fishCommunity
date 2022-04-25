@@ -30,6 +30,11 @@ public class SpringMvcConfig implements WebMvcConfigurer {
                         "/favicon.ico",
                         "/file/image/**",
                         "/article/getArticleLists/**",
+                        "/article/getArticleDetail/**",
+                        "/article/activeAuthor/**",
+                        "/article/disLikeArticle/**",
+                        "/article/recommend/**",
+                        "/comment/getCommentsList/**",
                         "/index/**"
                 );
     }

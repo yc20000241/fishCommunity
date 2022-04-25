@@ -91,7 +91,6 @@ public class RegisterService {
 			user.setToken(userToken);
 			String defaultPassword = "123456";
 			user.setPassword(DigestUtils.md5DigestAsHex(defaultPassword.getBytes()));
-			user.setGmtCreate(System.currentTimeMillis()+"");
 			//插入user注册信息
 			userMapper.insert(user);
 
@@ -104,6 +103,7 @@ public class RegisterService {
 			Userinfo userinfo = new Userinfo();
 			userinfo.setUserId(user1.getId());
 			userinfo.setNick("未命名");
+			userinfo.setGmtCreate(System.currentTimeMillis()+"");
 			userinfoMapper.insertSelective(userinfo);
 		}else
 			//验证码错误

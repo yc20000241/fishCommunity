@@ -6,7 +6,6 @@
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="token" jdbcType="VARCHAR" property="token" />
-    <result column="gmt_create" jdbcType="VARCHAR" property="gmtCreate" />
   </resultMap>
 
 

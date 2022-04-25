@@ -8,6 +8,7 @@ import com.fish.community.demo.req.PublishArticleReq;
 import com.fish.community.demo.resp.ArticleDetailResp;
 import com.fish.community.demo.resp.ArticleListResp;
 import com.fish.community.demo.resp.CommonResp;
+import com.fish.community.demo.resp.UserInfoResp;
 import com.fish.community.demo.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,7 @@ public class ArticleController {
 	public CommonResp likeArticle(@PathVariable("id") long id){
 		articleService.likeArticle(id);
 		CommonResp<Object> objectCommonResp = new CommonResp<>();
+		objectCommonResp.setMessage("点赞成功");
 		return objectCommonResp;
 	}
 
@@ -91,8 +93,8 @@ public class ArticleController {
 
 	@GetMapping("/activeAuthor/{count}")
 	public CommonResp activeAuthor(@PathVariable("count") Integer count){
-		List<User> users = articleService.activeAuthor(count);
-		CommonResp<List<User>> listCommonResp = new CommonResp<>();
+		List<UserInfoResp> users = articleService.activeAuthor(count);
+		CommonResp<List<UserInfoResp>> listCommonResp = new CommonResp<>();
 		listCommonResp.setContent(users);
 		return listCommonResp;
 	}
@@ -101,6 +103,7 @@ public class ArticleController {
 	public CommonResp disLikeArticle(@PathVariable("id") long id){
 		articleService.disLikeArticle(id);
 		CommonResp<Object> objectCommonResp = new CommonResp<>();
+		objectCommonResp.setMessage("点踩成功");
 		return objectCommonResp;
 	}
 

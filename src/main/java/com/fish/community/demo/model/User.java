@@ -9,8 +9,6 @@ public class User {
 
     private String token;
 
-    private String gmtCreate;
-
     public Long getId() {
         return id;
     }
@@ -43,14 +41,6 @@ public class User {
         this.token = token;
     }
 
-    public String getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(String gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -61,7 +51,6 @@ public class User {
         sb.append(", password=").append(password);
         sb.append(", email=").append(email);
         sb.append(", token=").append(token);
-        sb.append(", gmtCreate=").append(gmtCreate);
         sb.append("]");
         return sb.toString();
     }

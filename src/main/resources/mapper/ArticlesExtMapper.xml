@@ -76,4 +76,10 @@
     set dislike_count = dislike_count+1
     where id = #{id}
   </update>
+
+  <select id="getCountByAuthor" parameterType="long" resultType="int">
+    select count(*)
+    from articles
+    where author = #{userId}
+  </select>
 </mapper>

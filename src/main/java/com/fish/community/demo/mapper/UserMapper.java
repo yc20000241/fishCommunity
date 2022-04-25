@@ -8,8 +8,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
-@Component
 @Mapper
+@Component
 public interface UserMapper {
     long countByExample(UserExample example);
 

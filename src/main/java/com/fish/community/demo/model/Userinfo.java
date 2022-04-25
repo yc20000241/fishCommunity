@@ -19,6 +19,8 @@ public class Userinfo {
 
     private String nick;
 
+    private String gmtCreate;
+
     public Long getId() {
         return id;
     }
@@ -91,6 +93,14 @@ public class Userinfo {
         this.nick = nick;
     }
 
+    public String getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(String gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -106,6 +116,7 @@ public class Userinfo {
         sb.append(", followedCount=").append(followedCount);
         sb.append(", sign=").append(sign);
         sb.append(", nick=").append(nick);
+        sb.append(", gmtCreate=").append(gmtCreate);
         sb.append("]");
         return sb.toString();
     }

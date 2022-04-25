@@ -9,13 +9,10 @@ import javax.validation.constraints.NotNull;
 public class FocusUserReq {
 
 	@NotNull
-	private Long focus_on_user;
+	private Long focusOnUser;
 
 	@NotNull
-	private Long followed_user;
+	private Long followedUser;
 
-	@NotNull
-	@ApiModelProperty(value = "true为关注,false为取消关注")
-	private boolean focus;
 
 }

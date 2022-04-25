@@ -9,6 +9,7 @@ import com.fish.community.demo.req.PublishArticleReq;
 import com.fish.community.demo.resp.ActiveAuthorResp;
 import com.fish.community.demo.resp.ArticleDetailResp;
 import com.fish.community.demo.resp.ArticleListResp;
+import com.fish.community.demo.resp.UserInfoResp;
 import com.fish.community.demo.util.CopyUtil;
 import com.fish.community.demo.util.FileUtil;
 import com.fish.community.demo.util.RedisUtil;
@@ -44,7 +45,7 @@ public class ArticleService {
 	private RedisUtil redisUtil;
 
 	@Autowired
-	private UserExtMapper userExtMapper;
+	private UserinfoExtMapper userinfoExtMapper;
 
 	@Transactional
 	public ArticleDetailResp getArticleDetail(long id) throws IOException {
@@ -195,7 +196,7 @@ public class ArticleService {
 		return articles;
 	}
 
-	public List<User> activeAuthor(Integer count) {
+	public List<UserInfoResp> activeAuthor(Integer count) {
 		//获取前几条文章数最多的作者id
 		PageHelper.startPage(0, count);
 		ActiveAuthorResp[] authors = articlesExtMapper.activeAuthor();
@@ -203,9 +204,15 @@ public class ArticleService {
 		for (ActiveAuthorResp author : authors) {
 			longs.add(author.getAuthor());
 		}
-		//根据userId数组返回users
-		List<User> users = userExtMapper.selectIdIn(longs);
-		return users;
+		//根据userId数组返回userinfos
+		List<Userinfo> users = userinfoExtMapper.selectIdIn(longs);
+		List<UserInfoResp> userInfoResps = CopyUtil.copyList(users, UserInfoResp.class);
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		for (UserInfoResp userInfoResp : userInfoResps) {
+			userInfoResp.setGmtCreate(dateFormat.format(Long.valueOf(userInfoResp.getGmtCreate())));
+		}
+
+		return userInfoResps;
 	}
 
 	public void disLikeArticle(long id) {

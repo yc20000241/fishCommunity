@@ -26,7 +26,7 @@ public enum BusinessExceptionCode {
     NOTFOCUS_AND_BEFORE_NOTFOCUS("已是未关注状态", 2021),
     FOCUSED_AND_FOCUSING("已是关注状态", 2022),
     PARENT_COMMENT_NOT_EXIST("父级评论不存在", 2023),
-    TODAY_HAS_LIKEN_THE_ARTICLE("今天已经给这篇文章点过赞了", 2024),
+    TODAY_HAS_LIKEN_THE_ARTICLE("今天已经和这篇文章互动过了~", 2024),
     MODIFY_USERINFO_NEW_PASSOWRD_EMPTY("新密码不可为空",2025),
     ARTICLE_TAG_NOT_EXIST("该文章标签不存在", 2026)
     ;
