@@ -1,5 +1,6 @@
 package com.fish.community.demo.model;
 
+import lombok.Data;
 import org.springframework.stereotype.Component;
 
 @Component

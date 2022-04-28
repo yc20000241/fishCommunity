@@ -48,5 +48,6 @@
 <!--        <table tableName="articles"/>-->
 <!--        <table tableName="register_verification"/>-->
 <!--        <table tableName="comment"/>-->
+        <table tableName="chat_msg"/>
     </context>
 </generatorConfiguration>

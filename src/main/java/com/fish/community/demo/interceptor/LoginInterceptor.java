@@ -22,7 +22,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     private static final Logger LOG = LoggerFactory.getLogger(LoginInterceptor.class);
 
-    @Resource
+    @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
     @Override

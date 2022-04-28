@@ -5,6 +5,7 @@ import com.fish.community.demo.exception.BusinessExceptionCode;
 import com.fish.community.demo.model.RegisterVerification;
 import com.fish.community.demo.req.UserReq;
 import com.fish.community.demo.resp.CommonResp;
+import com.fish.community.demo.resp.LoginEmailResp;
 import com.fish.community.demo.resp.LoginResp;
 import com.fish.community.demo.service.LoginService;
 import io.swagger.annotations.ApiOperation;
@@ -69,7 +70,7 @@ public class LoginController {
 
 		RegisterVerification verification = loginService.getQQVerification(email);
 		commonResp.setMessage("验证码发送成功");
-		commonResp.setContent(verification);
+		commonResp.setContent(new LoginEmailResp(verification.getEmailToken()));
 
 		return commonResp;
 	}
