@@ -73,14 +73,14 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
 			}else{
         		uuid = dataContent.getUuid();
 			}
-		   UserChanelRel userChanelRel1 = ChannelUUIDRel.get(uuid);
+		   UserChanelRel userChanelRel1 = RelUUIDRel.get(uuid);
 		   Long senderId = dataContent.getChat().getSenderId();
         	if(userChanelRel1 == null){//无此组则创建
 				// 当websocket 第一次open的时候，初始化channel，把用的channel 和 userid 关联起来，
 				userChanelRel1 = new UserChanelRel();
 				userChanelRel1.put(senderId,channel);
 				// 并生成单独聊天号，将userChanelRel与会议号关联起来
-				ChannelUUIDRel.put(uuid, userChanelRel1);
+				RelUUIDRel.put(uuid, userChanelRel1);
 			}else{//有组则加入该组
 				userChanelRel1.put(senderId,channel);
 			}
@@ -112,9 +112,14 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
                     JsonUtils.objectToJson(listCommonResp)
             ));
 
+		   ChanelUser chanelUser = new ChanelUser();
+		   chanelUser.setSenderId(dataContent.getChat().getSenderId());
+		   chanelUser.setUuid(uuid);
+		   ChanelUUIDRel.put(ctx.channel(), chanelUser);
+		   sendJoinOrExit(1, "加入聊天成功", chanelUser);
         } else if(action == 2){//第一次加入群聊
             //根据uuid找到对应的userChanelRel
-            UserChanelRel userChanelRel = ChannelUUIDRel.get(dataContent.getUuid());
+            UserChanelRel userChanelRel = RelUUIDRel.get(dataContent.getUuid());
             //当websocket 第一次open的时候，初始化channel，把用的channel 和 userid 关联起来
             Long senderId = dataContent.getChat().getSenderId();
             userChanelRel.put(senderId, channel);
@@ -123,14 +128,13 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
 		    ChatMsgExtMapper chatMsgExtMapper = SpringUtil.getBean(ChatMsgExtMapper.class);
             //插入数据
             Chat chat = dataContent.getChat();
-            ChatMsgMapper chatMsgMapper = SpringUtil.getBean(ChatMsgMapper.class);
             ChatMsg chatMsg = CopyUtil.copy(chat, ChatMsg.class);
             chatMsg.setUuid(dataContent.getUuid());
             chatMsg.setGmtCreate(System.currentTimeMillis()+"");
             chatMsgExtMapper.insert(chatMsg);
             LOG.info("聊天记录插入"+chatMsg);
             //根据uuid取出相应userChanelRel， 再将userChanelRel里的每个channel都发送消息
-            UserChanelRel userChanelRel = ChannelUUIDRel.get(dataContent.getUuid());
+            UserChanelRel userChanelRel = RelUUIDRel.get(dataContent.getUuid());
             //根据senderId查出userInfo里的用户信息
 		   UserinfoExample userinfoExample = new UserinfoExample();
 		   userinfoExample.createCriteria().andUserIdEqualTo(chat.getSenderId());
@@ -151,8 +155,6 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
                 entry.getValue().writeAndFlush(new TextWebSocketFrame(
                         JsonUtils.objectToJson(chatRespCommonResp)
                 ));
-//				System.out.println(ctx.channel().id());
-//				System.out.println(entry.getValue().id());
             }
         }
     }
@@ -161,26 +163,19 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
         users.add(ctx.channel());
         LOG.info("加入channel_id为"+ctx.channel().id());
-		CommonResp<Object> objectCommonResp = new CommonResp<>();
-		objectCommonResp.setCode(1);
-		objectCommonResp.setMessage("加入聊天成功");
-		ctx.channel().writeAndFlush(new TextWebSocketFrame(
-				JsonUtils.objectToJson(objectCommonResp)
-		));
 	}
 
-    @Override
+	@Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
         String chanelId = ctx.channel().id().asShortText();
-        System.out.println("客户端被移除：channel id 为："+chanelId);
-        LOG.info("客户端被移除：channel id 为："+chanelId);
-        users.remove(ctx.channel());
-		CommonResp<Object> objectCommonResp = new CommonResp<>();
-		objectCommonResp.setCode(2);
-		objectCommonResp.setMessage("退出聊天成功");
-		ctx.channel().writeAndFlush(new TextWebSocketFrame(
-				JsonUtils.objectToJson(objectCommonResp)
-		));
+		ChanelUser chanelUser = ChanelUUIDRel.get(ctx.channel());
+		if(chanelUser == null){
+			ChanelUUIDRel.getManage().remove(ctx.channel());
+			System.out.println("客户端被移除：channel id 为："+chanelId);
+			LOG.info("客户端被移除：channel id 为："+chanelId);
+		}
+		users.remove(ctx.channel());
+		sendJoinOrExit(2, "退出聊天成功", chanelUser);
     }
 
     @Override
@@ -198,5 +193,45 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
 		}
     }
 
+
+	private List<Userinfo> getInlineUserInfos(UserChanelRel userChanelRel1) {
+		List<Userinfo> userinfos = null;
+
+		if(userChanelRel1 != null){
+			ArrayList<Long> longs = new ArrayList<>();
+			for(Map.Entry<Long, Channel> entry: userChanelRel1.getManage().entrySet()){
+				if(entry.getValue() == null){
+					userChanelRel1.getManage().remove(entry.getKey());
+				}else{
+					longs.add(entry.getKey());
+				}
+			}
+			UserinfoExtMapper bean = SpringUtil.getBean(UserinfoExtMapper.class);
+			userinfos = bean.selectIdIn(longs);
+		}
+		return userinfos;
+	}
+
+	private void sendJoinOrExit(Integer code, String message, ChanelUser chanelUser){
+    	//查出退出人的昵称
+		UserinfoExample userinfoExample = new UserinfoExample();
+		userinfoExample.createCriteria().andUserIdEqualTo(chanelUser.getSenderId());
+		UserinfoMapper bean = SpringUtil.getBean(UserinfoMapper.class);
+		Userinfo userinfo = bean.selectByExample(userinfoExample).get(0);
+		//封装通用类
+		CommonResp<List<Userinfo>> objectCommonResp = new CommonResp<>();
+		objectCommonResp.setCode(code);
+		objectCommonResp.setMessage(userinfo.getNick()+message);
+		UserChanelRel userChanelRel1 = RelUUIDRel.get(chanelUser.getUuid());
+		List<Userinfo> userInfoList = getInlineUserInfos(userChanelRel1);
+		objectCommonResp.setContent(userInfoList);
+		//给在这个聊天室里的人发退出消息
+		if(userChanelRel1 != null)
+			for(Map.Entry<Long, Channel> entry: userChanelRel1.getManage().entrySet()){
+				entry.getValue().writeAndFlush(new TextWebSocketFrame(
+						JsonUtils.objectToJson(objectCommonResp)
+				));
+		}
+	}
 
 }
