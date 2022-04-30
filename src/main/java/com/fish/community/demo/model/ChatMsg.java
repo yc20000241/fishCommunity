@@ -13,6 +13,8 @@ public class ChatMsg {
 
     private Long uuid;
 
+    private String gmtCreate;
+
     public Long getId() {
         return id;
     }
@@ -61,6 +63,14 @@ public class ChatMsg {
         this.uuid = uuid;
     }
 
+    public String getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(String gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -73,6 +83,7 @@ public class ChatMsg {
         sb.append(", content=").append(content);
         sb.append(", sign=").append(sign);
         sb.append(", uuid=").append(uuid);
+        sb.append(", gmtCreate=").append(gmtCreate);
         sb.append("]");
         return sb.toString();
     }

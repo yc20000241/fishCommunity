@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.fish.community.demo.mapper.ChatMsgMapper">
-  <resultMap id="BaseResultMap" type="com.fish.community.demo.model.ChatMsg">
+<mapper namespace="com.fish.community.demo.mapper.ChatUserMapper">
+  <resultMap id="BaseResultMap" type="com.fish.community.demo.model.ChatUser">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="sender_id" jdbcType="BIGINT" property="senderId" />
-    <result column="receiver_id" jdbcType="BIGINT" property="receiverId" />
-    <result column="content" jdbcType="VARCHAR" property="content" />
-    <result column="sign" jdbcType="INTEGER" property="sign" />
+    <result column="creater_id" jdbcType="BIGINT" property="createrId" />
     <result column="uuid" jdbcType="BIGINT" property="uuid" />
-    <result column="gmt_create" jdbcType="VARCHAR" property="gmtCreate" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,15 +65,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, sender_id, receiver_id, content, sign, uuid, gmt_create
+    id, creater_id, uuid
   </sql>
-  <select id="selectByExample" parameterType="com.fish.community.demo.model.ChatMsgExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.fish.community.demo.model.ChatUserExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from chat_msg
+    from chat_user
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -88,105 +84,67 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from chat_msg
+    from chat_user
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from chat_msg
+    delete from chat_user
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.fish.community.demo.model.ChatMsgExample">
-    delete from chat_msg
+  <delete id="deleteByExample" parameterType="com.fish.community.demo.model.ChatUserExample">
+    delete from chat_user
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.fish.community.demo.model.ChatMsg">
-    insert into chat_msg (id, sender_id, receiver_id, 
-      content, sign, uuid, 
-      gmt_create)
-    values (#{id,jdbcType=BIGINT}, #{senderId,jdbcType=BIGINT}, #{receiverId,jdbcType=BIGINT}, 
-      #{content,jdbcType=VARCHAR}, #{sign,jdbcType=INTEGER}, #{uuid,jdbcType=BIGINT}, 
-      #{gmtCreate,jdbcType=VARCHAR})
+  <insert id="insert" parameterType="com.fish.community.demo.model.ChatUser">
+    insert into chat_user (id, creater_id, uuid
+      )
+    values (#{id,jdbcType=BIGINT}, #{createrId,jdbcType=BIGINT}, #{uuid,jdbcType=BIGINT}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.fish.community.demo.model.ChatMsg">
-    insert into chat_msg
+  <insert id="insertSelective" parameterType="com.fish.community.demo.model.ChatUser">
+    insert into chat_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="senderId != null">
-        sender_id,
-      </if>
-      <if test="receiverId != null">
-        receiver_id,
-      </if>
-      <if test="content != null">
-        content,
-      </if>
-      <if test="sign != null">
-        sign,
+      <if test="createrId != null">
+        creater_id,
       </if>
       <if test="uuid != null">
         uuid,
-      </if>
-      <if test="gmtCreate != null">
-        gmt_create,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="senderId != null">
-        #{senderId,jdbcType=BIGINT},
-      </if>
-      <if test="receiverId != null">
-        #{receiverId,jdbcType=BIGINT},
-      </if>
-      <if test="content != null">
-        #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="sign != null">
-        #{sign,jdbcType=INTEGER},
+      <if test="createrId != null">
+        #{createrId,jdbcType=BIGINT},
       </if>
       <if test="uuid != null">
         #{uuid,jdbcType=BIGINT},
       </if>
-      <if test="gmtCreate != null">
-        #{gmtCreate,jdbcType=VARCHAR},
-      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.fish.community.demo.model.ChatMsgExample" resultType="java.lang.Long">
-    select count(*) from chat_msg
+  <select id="countByExample" parameterType="com.fish.community.demo.model.ChatUserExample" resultType="java.lang.Long">
+    select count(*) from chat_user
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update chat_msg
+    update chat_user
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.senderId != null">
-        sender_id = #{record.senderId,jdbcType=BIGINT},
-      </if>
-      <if test="record.receiverId != null">
-        receiver_id = #{record.receiverId,jdbcType=BIGINT},
-      </if>
-      <if test="record.content != null">
-        content = #{record.content,jdbcType=VARCHAR},
-      </if>
-      <if test="record.sign != null">
-        sign = #{record.sign,jdbcType=INTEGER},
+      <if test="record.createrId != null">
+        creater_id = #{record.createrId,jdbcType=BIGINT},
       </if>
       <if test="record.uuid != null">
         uuid = #{record.uuid,jdbcType=BIGINT},
-      </if>
-      <if test="record.gmtCreate != null">
-        gmt_create = #{record.gmtCreate,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -194,50 +152,30 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update chat_msg
+    update chat_user
     set id = #{record.id,jdbcType=BIGINT},
-      sender_id = #{record.senderId,jdbcType=BIGINT},
-      receiver_id = #{record.receiverId,jdbcType=BIGINT},
-      content = #{record.content,jdbcType=VARCHAR},
-      sign = #{record.sign,jdbcType=INTEGER},
-      uuid = #{record.uuid,jdbcType=BIGINT},
-      gmt_create = #{record.gmtCreate,jdbcType=VARCHAR}
+      creater_id = #{record.createrId,jdbcType=BIGINT},
+      uuid = #{record.uuid,jdbcType=BIGINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.fish.community.demo.model.ChatMsg">
-    update chat_msg
+  <update id="updateByPrimaryKeySelective" parameterType="com.fish.community.demo.model.ChatUser">
+    update chat_user
     <set>
-      <if test="senderId != null">
-        sender_id = #{senderId,jdbcType=BIGINT},
-      </if>
-      <if test="receiverId != null">
-        receiver_id = #{receiverId,jdbcType=BIGINT},
-      </if>
-      <if test="content != null">
-        content = #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="sign != null">
-        sign = #{sign,jdbcType=INTEGER},
+      <if test="createrId != null">
+        creater_id = #{createrId,jdbcType=BIGINT},
       </if>
       <if test="uuid != null">
         uuid = #{uuid,jdbcType=BIGINT},
       </if>
-      <if test="gmtCreate != null">
-        gmt_create = #{gmtCreate,jdbcType=VARCHAR},
-      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.fish.community.demo.model.ChatMsg">
-    update chat_msg
-    set sender_id = #{senderId,jdbcType=BIGINT},
-      receiver_id = #{receiverId,jdbcType=BIGINT},
-      content = #{content,jdbcType=VARCHAR},
-      sign = #{sign,jdbcType=INTEGER},
-      uuid = #{uuid,jdbcType=BIGINT},
-      gmt_create = #{gmtCreate,jdbcType=VARCHAR}
+  <update id="updateByPrimaryKey" parameterType="com.fish.community.demo.model.ChatUser">
+    update chat_user
+    set creater_id = #{createrId,jdbcType=BIGINT},
+      uuid = #{uuid,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

@@ -41,13 +41,14 @@
                              type="XMLMAPPER"/>
 
 
-        <table tableName="user"/>
-        <table tableName="userInfo"/>
+<!--        <table tableName="user"/>-->
+<!--        <table tableName="userInfo"/>-->
 <!--        <table tableName="user_relation"/>-->
 <!--        <table tableName="visits_today"/>-->
 <!--        <table tableName="articles"/>-->
 <!--        <table tableName="register_verification"/>-->
 <!--        <table tableName="comment"/>-->
-        <table tableName="chat_msg"/>
+<!--        <table tableName="chat_msg"/>-->
+<!--        <table tableName="chat_user"/>-->
     </context>
 </generatorConfiguration>

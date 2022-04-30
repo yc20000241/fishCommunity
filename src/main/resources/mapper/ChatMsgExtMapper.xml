@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fish.community.demo.mapper.ChatMsgExtMapper">
+  <resultMap id="BaseResultMap" type="com.fish.community.demo.model.ChatMsg">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sender_id" jdbcType="BIGINT" property="senderId" />
+    <result column="receiver_id" jdbcType="BIGINT" property="receiverId" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="sign" jdbcType="INTEGER" property="sign" />
+    <result column="uuid" jdbcType="BIGINT" property="uuid" />
+    <result column="gmt_create" jdbcType="VARCHAR" property="gmtCreate" />
+  </resultMap>
+  <select id="selectCommonChats" resultMap="BaseResultMap">
+    select *
+    from chat_msg
+    where uuid = #{uuid}
+    order by gmt_create desc
+    limit 0,50
+  </select>
+
+  <insert id="insert" parameterType="com.fish.community.demo.model.ChatMsg"
+          useGeneratedKeys="true" keyProperty="id">
+    insert into chat_msg (id, sender_id, receiver_id,
+      content, sign, uuid,
+      gmt_create)
+    values (#{id,jdbcType=BIGINT}, #{senderId,jdbcType=BIGINT}, #{receiverId,jdbcType=BIGINT},
+      #{content,jdbcType=VARCHAR}, #{sign,jdbcType=INTEGER}, #{uuid,jdbcType=BIGINT},
+      #{gmtCreate,jdbcType=VARCHAR})
+   </insert>
+</mapper>
