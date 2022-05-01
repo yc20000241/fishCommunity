@@ -156,7 +156,9 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
                         JsonUtils.objectToJson(chatRespCommonResp)
                 ));
             }
-        }
+        } else if(action == 0){
+		   System.out.print("收到来自channel:"+ctx.channel()+"的心跳包");
+	   }
     }
 
     @Override
@@ -169,16 +171,37 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
         String chanelId = ctx.channel().id().asShortText();
 		ChanelUser chanelUser = ChanelUUIDRel.get(ctx.channel());
-		if(chanelUser == null){
-			ChanelUUIDRel.getManage().remove(ctx.channel());
+		if(chanelUser != null ){
+			UserChanelRel userChanelRel1 = RelUUIDRel.get(chanelUser.getUuid());
+			if(userChanelRel1 != null){
+				CommonResp<Userinfo> userinfoCommonResp = getRemoveUserInfo(chanelUser);
+				for(Map.Entry<Long, Channel> entry: userChanelRel1.getManage().entrySet()){
+					entry.getValue().writeAndFlush(new TextWebSocketFrame(
+							JsonUtils.objectToJson(userinfoCommonResp)
+					));
+				}
+			}
 			System.out.println("客户端被移除：channel id 为："+chanelId);
 			LOG.info("客户端被移除：channel id 为："+chanelId);
 		}
 		users.remove(ctx.channel());
-		sendJoinOrExit(2, "退出聊天成功", chanelUser);
+
     }
 
-    @Override
+	private CommonResp<Userinfo> getRemoveUserInfo(ChanelUser chanelUser1) {
+		UserinfoMapper bean = SpringUtil.getBean(UserinfoMapper.class);
+		UserinfoExample userinfoExample = new UserinfoExample();
+		userinfoExample.createCriteria().andUserIdEqualTo(chanelUser1.getSenderId());
+		Userinfo userinfo = bean.selectByExample(userinfoExample).get(0);
+		CommonResp<Userinfo> userinfoCommonResp = new CommonResp<>();
+		userinfoCommonResp.setCode(2);
+		userinfoCommonResp.setMessage(userinfo.getNick()+"退出聊天室成功");
+		userinfoCommonResp.setContent(userinfo);
+
+		return userinfoCommonResp;
+	}
+
+	@Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         cause.printStackTrace();
 		if(cause instanceof BusinessException){
@@ -203,7 +226,8 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
 				if(entry.getValue() == null){
 					userChanelRel1.getManage().remove(entry.getKey());
 				}else{
-					longs.add(entry.getKey());
+					if(entry.getKey() != null)
+						longs.add(entry.getKey());
 				}
 			}
 			UserinfoExtMapper bean = SpringUtil.getBean(UserinfoExtMapper.class);

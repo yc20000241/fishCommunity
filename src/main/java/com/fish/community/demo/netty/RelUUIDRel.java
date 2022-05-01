@@ -10,7 +10,7 @@ public class RelUUIDRel {
 		manage.put(uuid,userChanelRel);
 	}
 
-	public static UserChanelRel get(Long senderId){
-		return manage.get(senderId);
+	public static UserChanelRel get(Long uuid){
+		return manage.get(uuid);
 	}
 }
