@@ -31,4 +31,14 @@
     order by gmt_create desc
   </select>
 
+  <select id="selectIn" resultMap="BaseResultMap">
+    select *
+    from comment
+    where id in (
+    <foreach collection="longs"  item="id" index="index" separator=",">
+      #{id}
+    </foreach>
+    ) and commented_id = #{userId} and type = 0
+  </select>
+
 </mapper>

@@ -26,13 +26,14 @@ public enum BusinessExceptionCode {
     NOTFOCUS_AND_BEFORE_NOTFOCUS("已是未关注状态", 2021),
     FOCUSED_AND_FOCUSING("已是关注状态", 2022),
     PARENT_COMMENT_NOT_EXIST("父级评论不存在", 2023),
-    TODAY_HAS_LIKEN_THE_ARTICLE("今天已经和这篇文章互动过了~", 2024),
+    TODAY_HAS_LIKEN_THE_ARTICLE("您已经和这篇文章互动过了~", 2024),
     MODIFY_USERINFO_NEW_PASSOWRD_EMPTY("新密码不可为空",2025),
     ARTICLE_TAG_NOT_EXIST("该文章标签不存在", 2026),
     CHAT_MESSAGE_FORMAT_WRONG("聊天消息格式错误",2027),
     JOIN_A_GROUP_BEFORE_CHAT("聊天前请先加入一个组", 2028),
     REQUEST_HEADER_MESSAGE_NOT_ALL("请求头信息不完整", 2029),
-    EMAIL_VERIFICATION_CEND_TOO_REPEATD("验证码发送过于频繁",2030)
+    EMAIL_VERIFICATION_CEND_TOO_REPEATD("验证码发送过于频繁",2030),
+    FOUCUS_NOT_MYSELF("不能关注自己", 2031)
     ;
 
     private String desc;

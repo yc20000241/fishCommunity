@@ -3,7 +3,6 @@ package com.fish.community.demo.controller;
 import com.fish.community.demo.exception.BusinessException;
 import com.fish.community.demo.exception.BusinessExceptionCode;
 import com.fish.community.demo.model.Articles;
-import com.fish.community.demo.model.User;
 import com.fish.community.demo.req.PublishArticleReq;
 import com.fish.community.demo.resp.ArticleDetailResp;
 import com.fish.community.demo.resp.ArticleListResp;
@@ -27,9 +26,9 @@ public class ArticleController {
 	@Autowired
 	private ArticleService articleService;
 
-	@GetMapping("/likeArticle/{id}")
-	public CommonResp likeArticle(@PathVariable("id") long id){
-		articleService.likeArticle(id);
+	@GetMapping("/likeArticle/{articleId}/{userid}")
+	public CommonResp likeArticle(@PathVariable("articleId") long articleId, @PathVariable("userid") Long userid){
+		articleService.likeArticle(articleId, userid);
 		CommonResp<Object> objectCommonResp = new CommonResp<>();
 		objectCommonResp.setMessage("点赞成功");
 		return objectCommonResp;

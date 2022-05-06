@@ -36,6 +36,9 @@ public class CommentService {
 	@Autowired
 	private UserinfoMapper userinfoMapper;
 
+	@Autowired
+	private NotificationMapper notificationMapper;
+
 	@Transactional
 	public void sendComment(CommentReq commentReq) {
 		hasArticleId(commentReq.getArticleId());
@@ -72,6 +75,17 @@ public class CommentService {
 			comment1.setCommentCount(comment2.getCommentCount()+1);
 			commentMapper.updateByExampleSelective(comment1, commentExample);
 		}
+
+		//插入消息表
+		Notification notification = new Notification();
+		notification.setGmtCreate(comment.getGmtCreate());
+		notification.setKind(2);
+		notification.setContent(comment.getContent());
+		notification.setArticleId(comment.getArticleId());
+		notification.setAffectId(comment.getCommenterId());
+		notification.setActionId(comment.getCommentedId());
+		notificationMapper.insertSelective(notification);
+
 	}
 
 	private void hasCommentId(Long rootId) {

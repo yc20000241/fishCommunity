@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fish.community.demo.mapper.NotificationExtMapper">
+  <resultMap id="BaseResultMap" type="com.fish.community.demo.model.Notification">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="affect_id" jdbcType="BIGINT" property="affectId" />
+    <result column="action_id" jdbcType="BIGINT" property="actionId" />
+    <result column="sign" jdbcType="INTEGER" property="sign" />
+    <result column="gmt_create" jdbcType="VARCHAR" property="gmtCreate" />
+    <result column="kind" jdbcType="INTEGER" property="kind" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="article_id" jdbcType="BIGINT" property="articleId" />
+  </resultMap>
+  <select id="getNotificationByAffectId" resultMap="BaseResultMap">
+    select *
+    from notification
+    where affect_id = #{userId} and sign = 0
+    order by gmt_create desc
+  </select>
+</mapper>

@@ -14,4 +14,7 @@ import java.util.List;
 public interface UserinfoExtMapper {
     List<Userinfo> selectIdIn(ArrayList<Long> longs);
 
+	void incFoucsCount(Long id, Integer i);
+
+	void incFollowedCount(Long id, Integer i);
 }

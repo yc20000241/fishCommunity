@@ -47,6 +47,19 @@ public class ArticleService {
 	@Autowired
 	private UserinfoExtMapper userinfoExtMapper;
 
+	@Autowired
+	private NotificationMapper notificationMapper;
+
+	private Articles hasArticle(long id){
+		ArticlesExample articlesExample = new ArticlesExample();
+		articlesExample.createCriteria().andIdEqualTo(id);
+		List<Articles> articles = articlesMapper.selectByExample(articlesExample);
+		if (articles.isEmpty())
+			return null;
+		else
+			return articles.get(0);
+	}
+
 	@Transactional
 	public ArticleDetailResp getArticleDetail(long id) throws IOException {
 		ArticlesExample articlesExample = new ArticlesExample();
@@ -182,12 +195,41 @@ public class ArticleService {
 		return articleListResp;
 	}
 
-	public void likeArticle(long id) {
-		String ip = RequestContext.getRemoteAddr();
-		if(redisUtil.validateRepeat("ARTICLE_LIKE"+id+"_"+ip, 3600*24))
-			articlesExtMapper.increaseLikeCount(id);
+	@Transactional
+	public void likeArticle(long articleId, long userid) {
+		Articles articles = hasArticle(articleId);
+		if(articles == null)
+			throw new BusinessException(BusinessExceptionCode.ARTICLE_NOT_EXIst);
+		User user = hasUserId(userid);
+		if(user == null)
+			throw new BusinessException(BusinessExceptionCode.USER_NOT_REGISTER);
+		//查看是否之前点过赞
+		NotificationExample notificationExample = new NotificationExample();
+		notificationExample.createCriteria().andActionIdEqualTo(userid).andArticleIdEqualTo(articleId).andKindEqualTo(1);
+		List<Notification> notifications = notificationMapper.selectByExample(notificationExample);
+		if(notifications.isEmpty()){
+			articlesExtMapper.increaseLikeCount(articleId);
+			Notification notification = new Notification();
+			notification.setActionId(userid);
+			notification.setAffectId(articles.getAuthor());
+			notification.setArticleId(articles.getId());
+			notification.setContent(articles.getTitle());
+			notification.setKind(1);
+			notification.setGmtCreate(System.currentTimeMillis()+"");
+			notificationMapper.insertSelective(notification);
+		}
 		else
 			throw new BusinessException(BusinessExceptionCode.TODAY_HAS_LIKEN_THE_ARTICLE);
+	}
+
+	private User hasUserId(long userid) {
+		UserExample userExample = new UserExample();
+		userExample.createCriteria().andIdEqualTo(userid);
+		List<User> users = userMapper.selectByExample(userExample);
+		if(users.isEmpty())
+			return null;
+		else
+			return users.get(0);
 	}
 
 	public List<Articles> recommend(Integer count, Integer tag) {
@@ -222,4 +264,6 @@ public class ArticleService {
 		else
 			throw new BusinessException(BusinessExceptionCode.TODAY_HAS_LIKEN_THE_ARTICLE);
 	}
+
+
 }

@@ -123,6 +123,11 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
             //当websocket 第一次open的时候，初始化channel，把用的channel 和 userid 关联起来
             Long senderId = dataContent.getChat().getSenderId();
             userChanelRel.put(senderId, channel);
+		   ChanelUser chanelUser = new ChanelUser();
+		   chanelUser.setUuid(dataContent.getUuid());
+		   chanelUser.setSenderId(dataContent.getChat().getSenderId());
+		   ChanelUUIDRel.put(channel,chanelUser);
+		   sendRemoveUserInfo(ctx, 1 , "加入聊天室");
 
         }else if(action == 3){//聊天类型的消息，把聊天记录保存到数据库
 		    ChatMsgExtMapper chatMsgExtMapper = SpringUtil.getBean(ChatMsgExtMapper.class);
@@ -157,7 +162,14 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
                 ));
             }
         } else if(action == 0){
+		   CommonResp<Object> objectCommonResp = new CommonResp<>();
+		   objectCommonResp.setCode(0);
+		   objectCommonResp.setMessage("心跳包发送成功");
+		   ctx.channel().writeAndFlush(new TextWebSocketFrame(
+		   		JsonUtils.objectToJson(objectCommonResp)
+		   ));
 		   System.out.print("收到来自channel:"+ctx.channel()+"的心跳包");
+//		   LOG.info("收到来自channel:"+ctx.channel()+"的心跳包");
 	   }
     }
 
@@ -170,35 +182,36 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
 	@Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
         String chanelId = ctx.channel().id().asShortText();
+		sendRemoveUserInfo(ctx, 2 , "退出聊天室");
+		System.out.println("客户端被移除：channel id 为："+chanelId);
+		LOG.info("客户端被移除：channel id 为："+chanelId);
+
+		users.remove(ctx.channel());
+
+    }
+
+	private void sendRemoveUserInfo(ChannelHandlerContext ctx, Integer code, String message) {
 		ChanelUser chanelUser = ChanelUUIDRel.get(ctx.channel());
 		if(chanelUser != null ){
 			UserChanelRel userChanelRel1 = RelUUIDRel.get(chanelUser.getUuid());
-			if(userChanelRel1 != null){
-				CommonResp<Userinfo> userinfoCommonResp = getRemoveUserInfo(chanelUser);
+			if(userChanelRel1 != null) {
+				UserinfoMapper bean = SpringUtil.getBean(UserinfoMapper.class);
+				UserinfoExample userinfoExample = new UserinfoExample();
+				userinfoExample.createCriteria().andUserIdEqualTo(chanelUser.getSenderId());
+				Userinfo userinfo = bean.selectByExample(userinfoExample).get(0);
+				CommonResp<Userinfo> userinfoCommonResp = new CommonResp<>();
+				userinfoCommonResp.setCode(code);
+				userinfoCommonResp.setMessage(userinfo.getNick()+message);
+				userinfoCommonResp.setContent(userinfo);
+
 				for(Map.Entry<Long, Channel> entry: userChanelRel1.getManage().entrySet()){
 					entry.getValue().writeAndFlush(new TextWebSocketFrame(
 							JsonUtils.objectToJson(userinfoCommonResp)
 					));
 				}
 			}
-			System.out.println("客户端被移除：channel id 为："+chanelId);
-			LOG.info("客户端被移除：channel id 为："+chanelId);
 		}
-		users.remove(ctx.channel());
 
-    }
-
-	private CommonResp<Userinfo> getRemoveUserInfo(ChanelUser chanelUser1) {
-		UserinfoMapper bean = SpringUtil.getBean(UserinfoMapper.class);
-		UserinfoExample userinfoExample = new UserinfoExample();
-		userinfoExample.createCriteria().andUserIdEqualTo(chanelUser1.getSenderId());
-		Userinfo userinfo = bean.selectByExample(userinfoExample).get(0);
-		CommonResp<Userinfo> userinfoCommonResp = new CommonResp<>();
-		userinfoCommonResp.setCode(2);
-		userinfoCommonResp.setMessage(userinfo.getNick()+"退出聊天室成功");
-		userinfoCommonResp.setContent(userinfo);
-
-		return userinfoCommonResp;
 	}
 
 	@Override

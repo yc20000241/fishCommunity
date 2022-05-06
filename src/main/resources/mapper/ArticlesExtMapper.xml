@@ -82,4 +82,14 @@
     from articles
     where author = #{userId}
   </select>
+
+  <select id="selectIdIn" parameterType="java.util.ArrayList" resultMap="BaseResultMap">
+    select *
+    from articles
+    where id in (
+    <foreach collection="list"  item="id" index="index" separator=",">
+      #{id}
+    </foreach>
+    )
+  </select>
 </mapper>

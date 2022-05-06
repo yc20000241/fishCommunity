@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -15,4 +16,6 @@ public interface CommentExtMapper {
     List<Comment> selectByArticleIdAndCommentId(Long articleId, Long rootId, Long parentId);
 
 	List<Comment> selectByArticleIdAndRootId(Long articleId, Long rootId);
+
+	List<Comment> selectIn(@Param("longs")ArrayList<Long> longs, @Param("userId")Long userId);
 }

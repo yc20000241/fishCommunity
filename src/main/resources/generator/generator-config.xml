@@ -50,5 +50,6 @@
 <!--        <table tableName="comment"/>-->
 <!--        <table tableName="chat_msg"/>-->
 <!--        <table tableName="chat_user"/>-->
+        <table tableName="notification"/>
     </context>
 </generatorConfiguration>

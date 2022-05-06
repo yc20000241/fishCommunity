@@ -22,4 +22,16 @@
     </foreach>
     )
   </select>
+
+  <update id="incFoucsCount">
+    update userInfo
+    set focus_on_count = focus_on_count + #{i}
+    where id = #{id}
+  </update>
+
+  <update id="incFollowedCount">
+    update userInfo
+    set followed_count = followed_count + #{i}
+    where id = #{id}
+  </update>
 </mapper>

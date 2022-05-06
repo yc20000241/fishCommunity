@@ -2,10 +2,7 @@ package com.fish.community.demo.service;
 
 import com.fish.community.demo.exception.BusinessException;
 import com.fish.community.demo.exception.BusinessExceptionCode;
-import com.fish.community.demo.mapper.ArticlesExtMapper;
-import com.fish.community.demo.mapper.UserMapper;
-import com.fish.community.demo.mapper.UserRelationMapper;
-import com.fish.community.demo.mapper.UserinfoMapper;
+import com.fish.community.demo.mapper.*;
 import com.fish.community.demo.model.*;
 import com.fish.community.demo.req.FocusUserReq;
 import com.fish.community.demo.req.UserInfoReq;
@@ -18,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,6 +26,9 @@ public class UserInfoService {
 
 	@Autowired
 	private UserinfoMapper userinfoMapper;
+
+	@Autowired
+	private UserinfoExtMapper userinfoExtMapper;
 
 	@Autowired
 	private UserMapper userMapper;
@@ -106,16 +107,11 @@ public class UserInfoService {
 	@Transactional
 	public boolean focusUser(FocusUserReq focusUserReq) {
 		//查看关注者和被关注者id是否存在
-		UserinfoExample userinfoExample = new UserinfoExample();
-		userinfoExample.createCriteria().andUserIdEqualTo(focusUserReq.getFocusOnUser());
-		List<Userinfo> focusUserinfos = userinfoMapper.selectByExample(userinfoExample);
-		if(focusUserinfos.isEmpty())
+		Userinfo userinfo1 = hasUserInfoId(focusUserReq.getFocusOnUser());
+		if(userinfo1 == null)
 			throw new BusinessException(BusinessExceptionCode.FOCUS_ON_USER_NOT_EXIST);
-
-		UserinfoExample userinfoExample1 = new UserinfoExample();
-		userinfoExample1.createCriteria().andUserIdEqualTo(focusUserReq.getFollowedUser());
-		List<Userinfo> followedUserinfos1 = userinfoMapper.selectByExample(userinfoExample1);
-		if(followedUserinfos1.isEmpty())
+		Userinfo userinfo2 = hasUserInfoId(focusUserReq.getFollowedUser());
+		if(userinfo2 == null)
 			throw new BusinessException(BusinessExceptionCode.FOLLOWED_USER_NOT_EXIST);
 
 		//查询此关系是否已经存在
@@ -140,25 +136,65 @@ public class UserInfoService {
 			userRelationMapper.updateByExampleSelective(userRelation1, userRelationExample);
 		}
 
-		Userinfo userinfo = new Userinfo();
 		if(flag){//增加关注
 			//关注的人的关注数量+1
-			userinfo.setFocusOnCount(focusUserinfos.get(0).getFocusOnCount()+1);
-			userinfoMapper.updateByExampleSelective(userinfo, userinfoExample);
+			userinfoExtMapper.incFoucsCount(userinfo1.getId(),1);
 			//被关注的人的被关注数+1
-			userinfo = new Userinfo();
-			userinfo.setFollowedCount(followedUserinfos1.get(0).getFollowedCount()+1);
-			userinfoMapper.updateByExampleSelective(userinfo, userinfoExample1);
+			userinfoExtMapper.incFollowedCount(userinfo2.getId(),1);
 		}else{
 			//关注的人的关注数量+1
-			userinfo.setFocusOnCount(focusUserinfos.get(0).getFocusOnCount()-1);
-			userinfoMapper.updateByExampleSelective(userinfo, userinfoExample);
+			userinfoExtMapper.incFoucsCount(userinfo1.getId(),-1);
 			//被关注的人的被关注数+1
-			userinfo = new Userinfo();
-			userinfo.setFollowedCount(followedUserinfos1.get(0).getFollowedCount()-1);
-			userinfoMapper.updateByExampleSelective(userinfo, userinfoExample1);
+			userinfoExtMapper.incFollowedCount(userinfo2.getId(),-1);
 		}
 
 		return flag;
+	}
+
+	public List<Userinfo> focusList(Long id) {
+		Userinfo userinfo = hasUserInfoId(id);
+		if(userinfo == null)
+			throw new BusinessException(BusinessExceptionCode.USER_NOT_REGISTER);
+
+		ArrayList<Long> longs = getFocusOrFollowedIdList(userinfo.getUserId(), false);
+
+		return userinfoExtMapper.selectIdIn(longs);
+	}
+
+	private Userinfo hasUserInfoId(Long id) {
+		UserinfoExample userinfoExample1 = new UserinfoExample();
+		userinfoExample1.createCriteria().andUserIdEqualTo(id);
+		List<Userinfo> followedUserinfos1 = userinfoMapper.selectByExample(userinfoExample1);
+		if(followedUserinfos1.isEmpty())
+			return null;
+		return followedUserinfos1.get(0);
+	}
+
+	public List<Userinfo> followedList(Long id) {
+		Userinfo userinfo = hasUserInfoId(id);
+		if(userinfo == null)
+			throw new BusinessException(BusinessExceptionCode.USER_NOT_REGISTER);
+
+		ArrayList<Long> longs = getFocusOrFollowedIdList(userinfo.getUserId(), true);
+
+		return userinfoExtMapper.selectIdIn(longs);
+	}
+
+	private ArrayList<Long> getFocusOrFollowedIdList(Long id, boolean flag){
+		UserRelationExample userRelationExample = new UserRelationExample();
+		if(flag)
+			userRelationExample.createCriteria().andFollowedUserEqualTo(id).andIsFocusEqualTo(1);
+		else
+			userRelationExample.createCriteria().andFocusOnUserEqualTo(id).andIsFocusEqualTo(1);
+		List<UserRelation> userRelations = userRelationMapper.selectByExample(userRelationExample);
+		ArrayList<Long> longs = new ArrayList<>();
+		for (UserRelation userRelation : userRelations) {
+			if(!flag)
+				longs.add(userRelation.getFollowedUser());
+			else
+				longs.add(userRelation.getFocusOnUser());
+		}
+
+		return longs;
 	}
 }
